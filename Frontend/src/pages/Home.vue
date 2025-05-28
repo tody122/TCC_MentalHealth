@@ -112,9 +112,8 @@ const navigateToForm = () => {
     <h2 class="recursos-title">Recursos e Ajuda</h2>
     <ul class="recursos-list">
       <li><a href="https://www.cvv.org.br/" target="_blank" rel="noopener">CVV - Centro de Valorização da Vida</a></li>
-      <li><a href="https://www.gov.br/saude/pt-br/composicao/sgtes/caps" target="_blank" rel="noopener">CAPS - Centros de Atenção Psicossocial</a></li>
-      <li><a href="https://facens.br/" target="_blank" rel="noopener">Facens - Apoio ao Estudante</a></li>
-      <li><a href="https://www.unicef.org/brazil/saude-mental" target="_blank" rel="noopener">UNICEF - Saúde Mental</a></li>
+      <li><a href="https://www.gov.br/saude/pt-br/composicao/saes/desmad/raps/caps" target="_blank" rel="noopener">CAPS - Centros de Atenção Psicossocial</a></li>
+      <li><a href="https://www.unicef.org/brazil/media/16126/file/saude-mental-de-adolescentes-e-jovens.pdf" target="_blank" rel="noopener">UNICEF - Saúde Mental</a></li>
     </ul>
   </section>
 
@@ -498,32 +497,48 @@ const navigateToForm = () => {
 .recursos-list {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 1rem;
   align-items: center;
   width: 100%;
+  padding: 0;
+  margin: 0;
 }
 
 .recursos-list li {
   width: 100%;
   max-width: 400px;
   text-align: center;
+  list-style: none;
+  margin: 0 auto;
 }
 
 .recursos-list a {
+  display: block;
   background: #e3f0fc;
-  border-radius: 6px;
-  padding: 0.3rem 0.7rem;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
   color: #217dbb;
   font-weight: 500;
   text-decoration: none;
   transition: background 0.2s, color 0.2s;
-  display: inline-block;
   width: 100%;
+  box-sizing: border-box;
+  font-size: 1.05rem;
 }
 
 .recursos-list a:hover {
   background: #3498db;
   color: #fff;
+}
+
+@media (max-width: 600px) {
+  .recursos-list li {
+    max-width: 100%;
+  }
+  .recursos-list a {
+    font-size: 0.98rem;
+    padding: 0.7rem 0.5rem;
+  }
 }
 
 /* Seção de anonimato e segurança */
