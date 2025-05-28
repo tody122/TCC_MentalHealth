@@ -48,21 +48,21 @@ const navigateToForm = () => {
     <div class="objectives-cards">
       <div class="objective-card">
         <div class="card-img">
-          <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="5" y="5" width="50" height="50" rx="12" fill="#fff" stroke="#bbb" stroke-width="2"/><path d="M30 20c-5 0-9 4-9 9 0 6 9 11 9 11s9-5 9-11c0-5-4-9-9-9zm0 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" fill="#3498db"/></svg>
+          <font-awesome-icon :icon="['fas', 'magnifying-glass']" size="2x" style="color: #3498db; background: #fff; border-radius: 50%; padding: 10px;" />
         </div>
         <h3>IDENTIFICAR SINAIS PRECOCES</h3>
         <p>Ajudar o usuário a reconhecer possíveis indícios de depressão e ansiedade com base em comportamentos e sentimentos do cotidiano.</p>
       </div>
       <div class="objective-card">
         <div class="card-img">
-          <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="5" y="5" width="50" height="50" rx="12" fill="#fff" stroke="#bbb" stroke-width="2"/><path d="M30 20c-5 0-9 4-9 9 0 6 9 11 9 11s9-5 9-11c0-5-4-9-9-9zm0 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" fill="#3498db"/></svg>
+          <font-awesome-icon :icon="['fas', 'brain']" size="2x" style="color: #3498db; background: #fff; border-radius: 50%; padding: 10px;" />
         </div>
         <h3>INCENTIVAR O AUTOCONHECIMENTO</h3>
         <p>Promover a reflexão sobre o próprio estado emocional e estimular uma maior consciência sobre a saúde mental.</p>
       </div>
       <div class="objective-card">
         <div class="card-img">
-          <svg width="60" height="60" viewBox="0 0 60 60" fill="none"><rect x="5" y="5" width="50" height="50" rx="12" fill="#fff" stroke="#bbb" stroke-width="2"/><path d="M30 20c-5 0-9 4-9 9 0 6 9 11 9 11s9-5 9-11c0-5-4-9-9-9zm0 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" fill="#3498db"/></svg>
+          <font-awesome-icon :icon="['fas', 'flag']" size="2x" style="color: #3498db; background: #fff; border-radius: 50%; padding: 10px;" />
         </div>
         <h3>OFERECER UM PONTO DE PARTIDA</h3>
         <p>Servir como uma ferramenta inicial para que o usuário considere procurar apoio psicológico, se necessário.</p>
