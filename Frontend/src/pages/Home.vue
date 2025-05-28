@@ -1,5 +1,17 @@
 <script setup>
-// Nenhum import necessário
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const navigateToForm = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
+  setTimeout(() => {
+    router.push('/formulario')
+  }, 300)
+}
 </script>
 
 <template>
@@ -11,7 +23,7 @@
         <br><br>
         As respostas são anônimas, mas podem auxiliar em um ponto de partida importante para compreender melhor o seu estado emocional. Preencha com sinceridade, buscando autoconhecimento, e lembre-se: não hesite em procurar ajuda especializada caso sinta diferente e tenha o apoio emocional, passo a passo, para se sentir melhor.
       </p>
-      <router-link to="/form" class="cta-button">Fazer o teste</router-link>
+      <button @click="navigateToForm" class="cta-button">Fazer o teste</button>
     </div>
     <div class="home-image">
       <!-- Imagem SVG minimalista -->
@@ -128,7 +140,7 @@
           <span class="feature-text">Resultado Imediato</span>
         </div>
       </div>
-      <router-link to="/form" class="cta-button-large">Fazer o Teste Agora</router-link>
+      <button @click="navigateToForm" class="cta-button-large">Fazer o Teste Agora</button>
     </div>
   </section>
 </template>
@@ -188,6 +200,12 @@
   line-height: 1.7;
 }
 
+.cta-button, .cta-button-large {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
 .cta-button {
   display: inline-block;
   background: linear-gradient(90deg, #3498db 0%, #217dbb 100%);
@@ -199,13 +217,31 @@
   font-weight: 500;
   transition: all 0.3s ease;
   box-shadow: 0 4px 16px rgba(52,152,219,0.18);
-  border: none;
 }
 
 .cta-button:hover {
   background: linear-gradient(90deg, #217dbb 0%, #3498db 100%);
   transform: translateY(-2px);
   box-shadow: 0 8px 32px rgba(52,152,219,0.25);
+}
+
+.cta-button-large {
+  display: inline-block;
+  background: white;
+  color: #3498db;
+  padding: 1.2rem 3rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.cta-button-large:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  background: #f8f9fa;
 }
 
 .home-image {
@@ -572,25 +608,6 @@
 .feature-text {
   font-size: 1rem;
   font-weight: 500;
-}
-
-.cta-button-large {
-  display: inline-block;
-  background: white;
-  color: #3498db;
-  padding: 1.2rem 3rem;
-  border-radius: 50px;
-  text-decoration: none;
-  font-size: 1.2rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-
-.cta-button-large:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  background: #f8f9fa;
 }
 
 @media (max-width: 900px) {

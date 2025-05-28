@@ -5,31 +5,55 @@ const activeTab = ref('form')
 const formData = ref({
   idade: '',
   genero: '',
-  sintomas: [],
-  frequencia: '',
-  duracao: '',
-  impacto: '',
+  familia_depressao: '',
+  renda_familiar: '',
+  idade_primeiro_sintoma: '',
+  divisao_renda: '',
+  ultima_serie_ciencias: '',
   comentario: ''
 })
 
 const respostas = ref([])
 
-const sintomas = [
-  'Ansiedade',
-  'Depressão',
-  'Insônia',
-  'Estresse',
-  'Mudanças de humor',
-  'Dificuldade de concentração',
-  'Fadiga',
-  'Irritabilidade'
+const opcoesFamiliaDepressao = [
+  'Sim',
+  'Não',
+  'Não quero responder',
+  'Não sei'
 ]
 
-const frequencias = [
-  'Raramente',
-  'Às vezes',
-  'Frequentemente',
-  'Sempre'
+const opcoesRendaFamiliar = [
+  'Vivendo confortavelmente com a renda atual',
+  'Sobrevivendo com a renda atual',
+  'Encontrando dificuldades com a renda atual',
+  'Encontrando muitas dificuldades com a renda atual',
+  'Não quero responder',
+  'Não sei'
+]
+
+const opcoesIdadePrimeiroSintoma = [
+  'Menos que 13 anos',
+  '13-19',
+  '20-29',
+  '30-39',
+  '40 ou mais velho',
+  'Não quero responder',
+  'Não sei'
+]
+
+const opcoesDivisaoRenda = [
+  '20% mais pobres',
+  '20% pobres',
+  '20% média',
+  '20% média alta',
+  '20% ricos'
+]
+
+const opcoesUltimaSerieCiencias = [
+  'Nenhuma',
+  'Primário',
+  'Fundamental ou Ensino Médio',
+  'Faculdade'
 ]
 
 const enviarFormulario = () => {
@@ -44,7 +68,7 @@ const enviarFormulario = () => {
 
   // Gerar e baixar CSV
   const criarCSV = (resposta) => {
-    const cabecalho = ['id', 'data', 'idade', 'genero', 'sintomas', 'frequencia', 'duracao', 'impacto', 'comentario'];
+    const cabecalho = ['id', 'data', 'idade', 'genero', 'familia_depressao', 'renda_familiar', 'idade_primeiro_sintoma', 'divisao_renda', 'ultima_serie_ciencias', 'comentario'];
     // Garante que os valores nulos ou indefinidos sejam strings vazias e que strings com vírgula sejam envolvidas por aspas
     const escaparValorCSV = (valor) => {
       if (valor === null || valor === undefined) {
@@ -62,10 +86,11 @@ const enviarFormulario = () => {
       escaparValorCSV(resposta.data),
       escaparValorCSV(resposta.idade),
       escaparValorCSV(resposta.genero),
-      escaparValorCSV(Array.isArray(resposta.sintomas) ? resposta.sintomas.join('; ') : resposta.sintomas), // Junta sintomas com '; '
-      escaparValorCSV(resposta.frequencia),
-      escaparValorCSV(resposta.duracao),
-      escaparValorCSV(resposta.impacto),
+      escaparValorCSV(resposta.familia_depressao),
+      escaparValorCSV(resposta.renda_familiar),
+      escaparValorCSV(resposta.idade_primeiro_sintoma),
+      escaparValorCSV(resposta.divisao_renda),
+      escaparValorCSV(resposta.ultima_serie_ciencias),
       escaparValorCSV(resposta.comentario)
     ].join(',');
 
@@ -92,10 +117,11 @@ const enviarFormulario = () => {
   formData.value = {
     idade: '',
     genero: '',
-    sintomas: [],
-    frequencia: '',
-    duracao: '',
-    impacto: '',
+    familia_depressao: '',
+    renda_familiar: '',
+    idade_primeiro_sintoma: '',
+    divisao_renda: '',
+    ultima_serie_ciencias: '',
     comentario: ''
   }
 }
@@ -165,66 +191,80 @@ const enviarFormulario = () => {
         </div>
 
         <div class="form-section">
-          <h2>Avaliação de Sintomas</h2>
-          <div class="form-group">
-            <label>Quais sintomas você tem experimentado? *</label>
-            <div class="checkbox-group">
-              <label v-for="sintoma in sintomas" :key="sintoma" class="checkbox-item">
-                <input
-                  type="checkbox"
-                  v-model="formData.sintomas"
-                  :value="sintoma"
-                  required
-                >
-                <span>{{ sintoma }}</span>
-              </label>
-            </div>
-          </div>
+          <h2>Avaliação de Contexto</h2>
 
           <div class="form-group">
-            <label for="frequencia">Com que frequência você experimenta estes sintomas? *</label>
+            <label for="familia_depressao">Amigos ou família têm se sentido com depressão/ansiedade? *</label>
             <select
-              id="frequencia"
-              v-model="formData.frequencia"
+              id="familia_depressao"
+              v-model="formData.familia_depressao"
               required
               class="select-input"
             >
               <option value="">Selecione uma opção</option>
-              <option v-for="freq in frequencias" :key="freq" :value="freq">
-                {{ freq }}
+              <option v-for="opcao in opcoesFamiliaDepressao" :key="opcao" :value="opcao">
+                {{ opcao }}
               </option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="duracao">Há quanto tempo você tem notado estes sintomas? *</label>
+            <label for="renda_familiar">Qual seu sentimento sobre renda familiar? *</label>
             <select
-              id="duracao"
-              v-model="formData.duracao"
+              id="renda_familiar"
+              v-model="formData.renda_familiar"
               required
               class="select-input"
             >
               <option value="">Selecione uma opção</option>
-              <option value="menos-1-mes">Menos de 1 mês</option>
-              <option value="1-3-meses">1 a 3 meses</option>
-              <option value="3-6-meses">3 a 6 meses</option>
-              <option value="mais-6-meses">Mais de 6 meses</option>
+              <option v-for="opcao in opcoesRendaFamiliar" :key="opcao" :value="opcao">
+                {{ opcao }}
+              </option>
             </select>
           </div>
 
           <div class="form-group">
-            <label for="impacto">Como estes sintomas impactam sua vida diária? *</label>
+            <label for="idade_primeiro_sintoma">Idade em que começou a se sentir deprimido/ansioso pela primeira vez? *</label>
             <select
-              id="impacto"
-              v-model="formData.impacto"
+              id="idade_primeiro_sintoma"
+              v-model="formData.idade_primeiro_sintoma"
               required
               class="select-input"
             >
               <option value="">Selecione uma opção</option>
-              <option value="leve">Levemente</option>
-              <option value="moderado">Moderadamente</option>
-              <option value="significativo">Significativamente</option>
-              <option value="severo">Severamente</option>
+              <option v-for="opcao in opcoesIdadePrimeiroSintoma" :key="opcao" :value="opcao">
+                {{ opcao }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="divisao_renda">Em qual divisão de renda você se encontra? *</label>
+            <select
+              id="divisao_renda"
+              v-model="formData.divisao_renda"
+              required
+              class="select-input"
+            >
+              <option value="">Selecione uma opção</option>
+              <option v-for="opcao in opcoesDivisaoRenda" :key="opcao" :value="opcao">
+                {{ opcao }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="ultima_serie_ciencias">Qual série que você estudou ciências pela última vez? *</label>
+            <select
+              id="ultima_serie_ciencias"
+              v-model="formData.ultima_serie_ciencias"
+              required
+              class="select-input"
+            >
+              <option value="">Selecione uma opção</option>
+              <option v-for="opcao in opcoesUltimaSerieCiencias" :key="opcao" :value="opcao">
+                {{ opcao }}
+              </option>
             </select>
           </div>
         </div>
