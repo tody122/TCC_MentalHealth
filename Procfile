@@ -1,0 +1,1 @@
+web: gunicorn TCC_FINAL:app 
