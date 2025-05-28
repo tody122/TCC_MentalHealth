@@ -7,9 +7,6 @@ Original file is located at
     https://colab.research.google.com/drive/1b-PvyeFc4PRqsZQcY20kdw1LtANARhZI
 """
 
-!pip install imbalanced-learn
-!pip install tensorflow
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -27,6 +24,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import random
 from pprint import pprint
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 """#IMPORTANDO O DATASET"""
 
