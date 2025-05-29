@@ -590,5 +590,7 @@ def home():
     return "API de Saúde Mental está funcionando!"
 
 if __name__ == '__main__':
+    # Obtém a porta do ambiente ou usa 5000 como padrão
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
+    # Configura o host para aceitar conexões de qualquer IP
+    app.run(host='0.0.0.0', port=port, debug=False)
