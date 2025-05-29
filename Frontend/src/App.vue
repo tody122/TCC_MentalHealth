@@ -10,7 +10,7 @@ import ScrollToTop from './components/ScrollToTop.vue'
     <ScrollToTop />
     <Navbar />
     <main class="main-content">
-      <router-view></router-view>
+    <router-view></router-view>
     </main>
     <FooterTCC />
   </div>
