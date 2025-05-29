@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const activeTab = ref('form')
 const formData = ref({
   idade: '',
@@ -64,7 +66,9 @@ const enviarFormulario = () => {
   }
   respostas.value.push(novaResposta)
   console.log('Dados do formulário:', novaResposta)
-  alert('Obrigado por compartilhar suas informações. Suas respostas serão analisadas com cuidado e sigilo.')
+
+  // Redirecionar para a página de resultados
+  router.push('/resultados')
 
   // Gerar e baixar CSV
   const criarCSV = (resposta) => {

@@ -1,39 +1,45 @@
+# app.py
+import joblib
+import numpy as np
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
-from dotenv import load_dotenv
 
-# Carrega variáveis de ambiente
-load_dotenv()
-
+# Inicializa a API Flask
 app = Flask(__name__)
-CORS(app)  # Permite requisições de diferentes origens
+CORS(app)
+
+# Carrega os modelos
+modelo_rf = joblib.load("modelo_rf.pkl")
+modelo_mlp = joblib.load("modelo_mlp.pkl")
+modelo_gb = joblib.load("modelo_gb.pkl")
+
+# Carrega scaler, PCA e features
+scaler = joblib.load("scaler.pkl")
+pca = joblib.load("pca.pkl")
+features = joblib.load("features.pkl")  # lista com strings dos nomes das features
 
 @app.route('/')
-def home():
-    return jsonify({
-        "status": "online",
-        "message": "API da IA está funcionando!"
-    })
+def index():
+    return "API de Saúde Mental funcionando!"
 
-@app.route('/predict', methods=['POST'])
-def predict():
+@app.route('/prever', methods=['POST'])
+def prever():
     try:
-        data = request.get_json()
-        # Aqui você vai adicionar o código para carregar seu modelo
-        # e fazer as previsões
-        
-        # Exemplo de resposta:
-        return jsonify({
-            "status": "success",
-            "prediction": "resultado da sua IA aqui"
-        })
+        dados = request.get_json()
+        entrada = np.array([[dados[feat] for feat in features]])
+        entrada = scaler.transform(entrada)
+        entrada = pca.transform(entrada)
+
+        resultado = {
+            "RandomForest": int(modelo_rf.predict(entrada)[0]),
+            "MLP": int(modelo_mlp.predict(entrada)[0]),
+            "GradientBoosting": int(modelo_gb.predict(entrada)[0])
+        }
+
+        return jsonify(resultado)
+
     except Exception as e:
-        return jsonify({
-            "status": "error",
-            "message": str(e)
-        }), 500
+        return jsonify({"erro": str(e)}), 400
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port) 
+    app.run(debug=False)

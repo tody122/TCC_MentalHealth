@@ -23,7 +23,6 @@ const navigateToForm = () => {
         <br><br>
         As respostas são anônimas, mas podem auxiliar em um ponto de partida importante para compreender melhor o seu estado emocional. Preencha com sinceridade, buscando autoconhecimento, e lembre-se: não hesite em procurar ajuda especializada caso sinta diferente e tenha o apoio emocional, passo a passo, para se sentir melhor.
       </p>
-      <button @click="navigateToForm" class="cta-button">Fazer o teste</button>
     </div>
     <div class="home-image">
       <!-- Imagem SVG minimalista -->
@@ -70,6 +69,35 @@ const navigateToForm = () => {
     </div>
   </section>
 
+  <!-- Seção Informativa sobre Depressão e Ansiedade -->
+  <section class="info-section">
+    <h2 class="info-title">Entendendo a Saúde Mental</h2>
+    <div class="info-cards">
+      <div class="info-card">
+        <h3>O que é Depressão?</h3>
+        <p>A depressão é um transtorno mental que afeta o humor, causando tristeza persistente e perda de interesse em atividades. Pode afetar como você se sente, pensa e se comporta, levando a uma variedade de problemas emocionais e físicos.</p>
+        <ul class="info-list">
+          <li>Sentimentos persistentes de tristeza</li>
+          <li>Perda de interesse em atividades</li>
+          <li>Alterações no sono e apetite</li>
+          <li>Dificuldade de concentração</li>
+          <li>Sentimentos de desesperança</li>
+        </ul>
+      </div>
+      <div class="info-card">
+        <h3>O que é Ansiedade?</h3>
+        <p>A ansiedade é uma resposta natural do corpo ao estresse, mas quando excessiva, pode se tornar um transtorno. Caracteriza-se por preocupação e medo intensos, excessivos e persistentes sobre situações cotidianas.</p>
+        <ul class="info-list">
+          <li>Preocupação excessiva</li>
+          <li>Inquietação e tensão</li>
+          <li>Dificuldade de relaxar</li>
+          <li>Problemas de concentração</li>
+          <li>Sintomas físicos (taquicardia, sudorese)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <!-- Depoimentos/Frases de Impacto -->
   <section class="depoimentos-section">
     <h2 class="depoimentos-title">Palavras que Inspiram</h2>
@@ -82,19 +110,33 @@ const navigateToForm = () => {
 
   <!-- Como Funciona -->
   <section class="como-funciona-section">
-    <h2 class="como-funciona-title">Como funciona?</h2>
-    <div class="como-funciona-steps">
-      <div class="step">
-        <div class="step-icon">1️⃣</div>
-        <div class="step-desc">Responda o questionário de forma anônima e sincera.</div>
-      </div>
-      <div class="step">
-        <div class="step-icon">2️⃣</div>
-        <div class="step-desc">Receba um panorama sobre seu bem-estar mental.</div>
-      </div>
-      <div class="step">
-        <div class="step-icon">3️⃣</div>
-        <div class="step-desc">Procure apoio profissional se sentir necessidade.</div>
+    <h2 class="como-funciona-title">Como funciona nossa IA?</h2>
+    <div class="como-funciona-content">
+      <p class="como-funciona-intro">
+        Desenvolvida como parte de um projeto de pesquisa acadêmica, nossa Inteligência Artificial foi treinada para analisar padrões comportamentais e identificar possíveis indicadores de saúde mental. O sistema utiliza algoritmos avançados de machine learning para processar suas respostas e fornecer insights personalizados.
+      </p>
+      <div class="como-funciona-steps">
+        <div class="step">
+          <div class="step-icon">🤖</div>
+          <div class="step-desc">
+            <h4>Análise por IA</h4>
+            <p>Nossa IA analisa suas respostas usando algoritmos de machine learning desenvolvidos especificamente para este projeto.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-icon">📊</div>
+          <div class="step-desc">
+            <h4>Processamento de Dados</h4>
+            <p>O sistema processa os dados comportamentais e identifica padrões relevantes para sua saúde mental.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-icon">🎯</div>
+          <div class="step-desc">
+            <h4>Resultados Personalizados</h4>
+            <p>Você recebe um diagnóstico preliminar e recomendações específicas baseadas em sua situação.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -375,32 +417,108 @@ const navigateToForm = () => {
   box-shadow: 0 4px 16px rgba(52,152,219,0.10);
 }
 
-/* Como Funciona */
-.como-funciona-section {
-  background: #eaf6fb;
-  padding: 2.5rem 1rem 2rem 1rem;
-  margin: 3rem 0 0 0;
+/* Seção Informativa */
+.info-section {
+  background: #f8f9fa;
+  padding: 4rem 2rem;
+  margin: 3rem 0;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(52,152,219,0.08);
-  max-width: 900px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
 }
 
-.como-funciona-title {
+.info-title {
   text-align: center;
-  font-size: 1.18rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #1a3a4a;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
   position: relative;
 }
 
-.como-funciona-title::before {
+.info-title::before {
   content: "💙";
   margin-right: 0.5rem;
   font-size: 1.3rem;
   vertical-align: middle;
+}
+
+.info-cards {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.info-card {
+  background: white;
+  border: 2px solid #3498db;
+  border-radius: 12px;
+  padding: 2rem;
+  flex: 1;
+  min-width: 300px;
+  max-width: 500px;
+  box-shadow: 0 4px 16px rgba(52,152,219,0.10);
+}
+
+.info-card h3 {
+  color: #1a3a4a;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.info-card p {
+  color: #2c3e50;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.info-list {
+  list-style: none;
+  padding: 0;
+}
+
+.info-list li {
+  color: #2c3e50;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+  padding-left: 1.5rem;
+  position: relative;
+}
+
+.info-list li::before {
+  content: "•";
+  color: #3498db;
+  position: absolute;
+  left: 0;
+  font-size: 1.2rem;
+}
+
+/* Como Funciona Atualizado */
+.como-funciona-section {
+  background: #eaf6fb;
+  padding: 4rem 2rem;
+  margin: 3rem 0;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(52,152,219,0.08);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.como-funciona-intro {
+  text-align: center;
+  color: #2c3e50;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .como-funciona-steps {
@@ -411,27 +529,34 @@ const navigateToForm = () => {
 }
 
 .step {
-  background: #fff;
+  background: white;
   border: 2px solid #3498db;
-  border-radius: 8px;
-  padding: 1.2rem 1.5rem;
+  border-radius: 12px;
+  padding: 2rem;
   box-shadow: 0 4px 16px rgba(52,152,219,0.10);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 180px;
-  max-width: 220px;
+  flex: 1;
+  min-width: 250px;
+  max-width: 350px;
 }
 
 .step-icon {
-  font-size: 2rem;
-  margin-bottom: 0.7rem;
-  color: #3498db;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
-.step-desc {
+.step-desc h4 {
+  color: #1a3a4a;
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.step-desc p {
   color: #2c3e50;
   font-size: 1rem;
+  line-height: 1.5;
   text-align: center;
 }
 
@@ -661,5 +786,46 @@ const navigateToForm = () => {
     padding: 1rem 2rem;
     font-size: 1.1rem;
   }
+
+  .info-cards, .como-funciona-steps {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .info-card, .step {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.como-funciona-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a3a4a;
+  margin-bottom: 2rem;
+  position: relative;
+  padding-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.como-funciona-title::before {
+  content: "🤖";
+  margin-right: 1rem;
+  font-size: 2rem;
+  vertical-align: middle;
+}
+
+.como-funciona-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #3498db, #217dbb);
+  border-radius: 2px;
 }
 </style>

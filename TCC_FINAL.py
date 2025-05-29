@@ -27,8 +27,118 @@ import random
 from pprint import pprint
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import joblib
+from sklearn.decomposition import PCA
+from imblearn.over_sampling import SMOTE
+from sklearn.ensemble import GradientBoostingClassifier
 
-# Configuração do servidor Flask
+# ====== TREINAMENTO DOS MODELOS ======
+print("Iniciando treinamento dos modelos...")
+
+# Importando o dataset
+df = pd.read_csv("Mentalhealth.csv", low_memory=False)
+
+# Filtrando para países sul-americanos
+paises_sul_americanos = [
+    'Argentina', 'Bolivia', 'Brazil', 'Chile', 'Colombia',
+    'Ecuador', 'Paraguay', 'Peru', 'Uruguay', 'Venezuela'
+]
+df_SulAmericanos = df[df['COUNTRYNEW'].isin(paises_sul_americanos)]
+
+# Removendo colunas desnecessárias
+df_SulAmerica_util = df_SulAmericanos.drop(columns=['WPID_RANDOM', 'FIELD_DATE', 'PROJWT', 'WGT',
+                      'YEAR_WAVE','Global11Regions','age_var1',
+                      'age_var2', 'Age','WP21757', 'WP21758',
+                      'WP21759', 'WP21760', 'WP21761', 'WP21768',
+                      'W10', 'W13', 'W14', 'W15',
+                      'W15_1A', 'W15_1B', 'W15_1C',
+                      'W15_1D','W15_1E','W15_2A', 'W15_2B','W30'])
+
+# Transformando colunas
+colunas_ordinais = [
+    'W1','W2','W3', 'W4', 'W5A','W5B','W5C', 'W5D','W5E','W5F','W5G','W6','W7A','W7B', 'W7C','W8','W9','W11A',
+    'W14','W11B', 'W30', 'age_mh', 'Household_Income',
+    'MH1', 'MH2A', 'MH2B', 'MH3B', 'MH4B', 'MH5', 'MH6', 'MH3A','MH3B','MH3C','MH3D',
+    'MH4A','MH4B','MH5','MH9A','MH9B', 'MH9C', 'MH9D', 'MH9E', 'MH9F',
+    'MH9G','MH9H','W28','W29', 'age_mh', 'wbi', 'subjective_Income'
+]
+
+colunas_nominais = ['COUNTRYNEW','MH7B_2','EMP_2010']
+colunas_booleanas = ['MH6','MH7A','MH7C','MH8A','MH8B','MH8C','MH8D','MH8E','MH8F','MH8G','MH8H','W27']
+
+# Processando colunas ordinais
+for col in colunas_ordinais:
+    if col in df_SulAmerica_util.columns:
+        df_SulAmerica_util[col] = df_SulAmerica_util[col].replace([' ', '', '99', 99], np.nan)
+        df_SulAmerica_util[col] = pd.to_numeric(df_SulAmerica_util[col], errors='coerce')
+
+# Processando colunas booleanas
+for col in colunas_booleanas:
+    if col in df_SulAmerica_util.columns:
+        df_SulAmerica_util[col] = df_SulAmerica_util[col].astype(str).str.strip()
+        df_SulAmerica_util[col] = df_SulAmerica_util[col].replace({
+            '1': 1, '2': 0, '99': np.nan, '99.0': np.nan, '': np.nan, 'nan': np.nan
+        })
+        df_SulAmerica_util[col] = pd.to_numeric(df_SulAmerica_util[col], errors='coerce')
+        df_SulAmerica_util[col] = df_SulAmerica_util[col].astype('Int64')
+
+# Criando variáveis dummy
+df_Numerico = pd.get_dummies(df_SulAmerica_util, columns=colunas_nominais, dummy_na=False)
+
+# Removendo colunas com muitos valores nulos
+df_Numerico_Relevantes = df_Numerico.drop(columns=['MH9D','MH9A','MH9B', 'MH9F', 'MH8G', 'age_mh',
+                                        'MH8H', 'MH8E', 'MH7C','MH8B','MH8C', 'MH8D',
+                                        'MH8A', 'MH9G','MH9G', 'MH9E', 'MH9C', 'MH7B', 'MH8F', 'MH9H'])
+
+# Tratando valores nulos
+for col in df_Numerico_Relevantes.columns:
+    if df_Numerico_Relevantes[col].isnull().sum() > 0:
+        media = df_Numerico_Relevantes[col].mean()
+        media_arredondada = round(media)
+        df_Numerico_Relevantes[col] = df_Numerico_Relevantes[col].fillna(media_arredondada)
+
+# Preparando dados para treinamento
+X = df_Numerico_Relevantes.drop('MH7A', axis=1)
+y = df_Numerico_Relevantes['MH7A']
+
+# Aplicando PCA
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+pca = PCA(n_components=5, random_state=42)
+X_pca = pca.fit_transform(X_scaled)
+
+# Dividindo dados
+X_train, X_test, y_train, y_test = train_test_split(X_pca, y, test_size=0.2, random_state=42, stratify=y)
+
+# Balanceando dados
+smote = SMOTE(random_state=42)
+X_train_res, y_train_res = smote.fit_resample(X_train, y_train)
+
+# Treinando modelos
+print("Treinando Random Forest...")
+modelo_rf = RandomForestClassifier(random_state=42)
+modelo_rf.fit(X_train_res, y_train_res)
+
+print("Treinando MLP...")
+modelo_mlp = MLPClassifier(random_state=42, max_iter=300)
+modelo_mlp.fit(X_train_res, y_train_res)
+
+print("Treinando Gradient Boosting...")
+modelo_gb = GradientBoostingClassifier(random_state=42)
+modelo_gb.fit(X_train_res, y_train_res)
+
+# Salvando modelos e objetos
+print("Salvando modelos e objetos...")
+joblib.dump(modelo_rf, 'modelo_rf.pkl')
+joblib.dump(modelo_mlp, 'modelo_mlp.pkl')
+joblib.dump(modelo_gb, 'modelo_gb.pkl')
+joblib.dump(scaler, 'scaler.pkl')
+joblib.dump(pca, 'pca.pkl')
+joblib.dump(X.columns.tolist(), 'features.pkl')
+print('Modelos e objetos salvos com sucesso!')
+
+# ====== CONFIGURAÇÃO DO SERVIDOR FLASK ======
 app = Flask(__name__)
 CORS(app)
 
@@ -36,12 +146,39 @@ CORS(app)
 def home():
     return "API de Saúde Mental está funcionando!"
 
-if __name__ == '__main__':
-    print("API de Saúde Mental ESTA NO LOOP DO IF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    # Obtém a porta do ambiente ou usa 5000 como padrão
-    port = int(os.environ.get('PORT', 5000))
-    # Configura o host para aceitar conexões de qualquer IP
-    app.run(host='0.0.0.0', port=port, debug=False)
+@app.route('/prever', methods=['POST'])
+def prever():
+    try:
+        dados = request.get_json()
+        if not dados:
+            return jsonify({'erro': 'Nenhum dado recebido'}), 400
+
+        df_input = pd.DataFrame([dados])
+
+        # Selecionar e reordenar as features necessárias
+        df_input = df_input[X.columns.tolist()]
+
+        # Pré-processar
+        dados_escalados = scaler.transform(df_input)
+        dados_pca = pca.transform(dados_escalados)
+
+        # Previsões
+        pred_rf = modelo_rf.predict(dados_pca)[0]
+        pred_mlp = modelo_mlp.predict(dados_pca)[0]
+        pred_gb = modelo_gb.predict(dados_pca)[0]
+
+        # Retornar resultados
+        return jsonify({
+            'RandomForest': int(pred_rf),
+            'MLP': int(pred_mlp),
+            'GradientBoosting': int(pred_gb)
+        })
+
+    except Exception as e:
+        return jsonify({'erro': str(e)}), 500
+
+if __name__ == "__main__":
+    app.run(debug=True, host='0.0.0.0')
 
 """#IMPORTANDO O DATASET"""
 
@@ -374,15 +511,22 @@ print("=== GRADIENT BOOSTING ===")
 print("Acurácia:", accuracy_score(y_test, y_pred_gb))
 print("Recall:", recall_score(y_test, y_pred_gb))
 print("\nMatriz de Confusão:")
-# Gera a matriz de confusão
 cm = confusion_matrix(y_test, y_pred_gb)
-# Exibe visualmente
-plt.figure(figsize=(5, 4))
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=False)
-plt.xlabel('Previsão')
-plt.ylabel('Real')
-plt.title('Matriz de Confusão')
+sns.heatmap(cm, annot=True, fmt='d', cmap='Oranges', cbar=False)
+plt.title("Matriz de Confusão - Gradient Boosting")
+plt.xlabel("Previsão")
+plt.ylabel("Real")
 plt.show()
+
+# ====== SALVANDO OS MODELOS E OBJETOS PARA A API ======
+import joblib
+joblib.dump(modelo_rf, 'modelo_rf.pkl')
+joblib.dump(modelo_mlp, 'modelo_mlp.pkl')
+joblib.dump(modelo_gb, 'modelo_gb.pkl')
+joblib.dump(scaler, 'scaler.pkl')
+joblib.dump(pca, 'pca.pkl')
+joblib.dump(top_features, 'features.pkl')
+print('Modelos e objetos salvos com sucesso!')
 
 """##Por filtro da correlação"""
 
