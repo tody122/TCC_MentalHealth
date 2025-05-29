@@ -30,56 +30,65 @@ from flask_cors import CORS
 import joblib
 
 # Configuração do servidor Flask
-app = Flask(__name__)
-CORS(app)
+# app = Flask(__name__)
+# CORS(app)
 
-# Carregar o modelo treinado e as colunas
-try:
-    model = joblib.load('model.joblib')
-    scaler = joblib.load('scaler.joblib')
-    feature_columns = joblib.load('feature_columns.joblib')
-    print("Modelo carregado com sucesso!")
-except Exception as e:
-    print(f"Erro ao carregar o modelo: {str(e)}")
-    model = None
-    scaler = None
-    feature_columns = None
+# # Carregar o modelo treinado e as colunas
+# try:
+#     model = joblib.load('model.joblib')
+#     scaler = joblib.load('scaler.joblib')
+#     feature_columns = joblib.load('feature_columns.joblib')
+#     print("Modelo carregado com sucesso!")
+# except Exception as e:
+#     print(f"Erro ao carregar o modelo: {str(e)}")
+#     model = None
+#     scaler = None
+#     feature_columns = None
 
-@app.route('/')
-def home():
-    return "API de Saúde Mental está funcionando!"
+# @app.route('/')
+# def home():
+#     return "API de Saúde Mental está funcionando!"
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    if model is None:
-        return jsonify({"error": "Modelo não carregado"}), 500
+# @app.route('/predict', methods=['POST'])
+# def predict():
+#     if model is None:
+#         return jsonify({"error": "Modelo não carregado"}), 500
     
-    try:
-        data = request.get_json()
+#     try:
+#         data = request.get_json()
         
-        # Garantir que todas as colunas necessárias estejam presentes
-        input_data = pd.DataFrame([data])
-        for col in feature_columns:
-            if col not in input_data.columns:
-                input_data[col] = 0
+#         # Garantir que todas as colunas necessárias estejam presentes
+#         input_data = pd.DataFrame([data])
+#         for col in feature_columns:
+#             if col not in input_data.columns:
+#                 input_data[col] = 0
         
-        # Reordenar as colunas para corresponder ao treinamento
-        input_data = input_data[feature_columns]
+#         # Reordenar as colunas para corresponder ao treinamento
+#         input_data = input_data[feature_columns]
         
-        # Fazer a previsão
-        prediction = model.predict(input_data)
-        probability = model.predict_proba(input_data)[0][1]
+#         # Fazer a previsão
+#         prediction = model.predict(input_data)
+#         probability = model.predict_proba(input_data)[0][1]
         
-        return jsonify({
-            "prediction": int(prediction[0]),
-            "probability": float(probability)
-        })
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+#         return jsonify({
+#             "prediction": int(prediction[0]),
+#             "probability": float(probability)
+#         })
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 400
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
+
+#app.py
+from flask import Flask
+app = Flask(__name__)
+@app.route("/")
+def hello():
+    return "Hello World!"
+if __name__ == "__main__":
     app.run(debug=True)
-
 
 """#IMPORTANDO O DATASET"""
 
