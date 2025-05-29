@@ -27,68 +27,21 @@ import random
 from pprint import pprint
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import joblib
 
 # Configuração do servidor Flask
-# app = Flask(__name__)
-# CORS(app)
-
-# # Carregar o modelo treinado e as colunas
-# try:
-#     model = joblib.load('model.joblib')
-#     scaler = joblib.load('scaler.joblib')
-#     feature_columns = joblib.load('feature_columns.joblib')
-#     print("Modelo carregado com sucesso!")
-# except Exception as e:
-#     print(f"Erro ao carregar o modelo: {str(e)}")
-#     model = None
-#     scaler = None
-#     feature_columns = None
-
-# @app.route('/')
-# def home():
-#     return "API de Saúde Mental está funcionando!"
-
-# @app.route('/predict', methods=['POST'])
-# def predict():
-#     if model is None:
-#         return jsonify({"error": "Modelo não carregado"}), 500
-    
-#     try:
-#         data = request.get_json()
-        
-#         # Garantir que todas as colunas necessárias estejam presentes
-#         input_data = pd.DataFrame([data])
-#         for col in feature_columns:
-#             if col not in input_data.columns:
-#                 input_data[col] = 0
-        
-#         # Reordenar as colunas para corresponder ao treinamento
-#         input_data = input_data[feature_columns]
-        
-#         # Fazer a previsão
-#         prediction = model.predict(input_data)
-#         probability = model.predict_proba(input_data)[0][1]
-        
-#         return jsonify({
-#             "prediction": int(prediction[0]),
-#             "probability": float(probability)
-#         })
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 400
-
-# if __name__ == '__main__':
-#     app.run(debug=True)
-
-
-#app.py
-from flask import Flask
 app = Flask(__name__)
-@app.route("/")
-def hello():
-    return "Hello World!"
-if __name__ == "__main__":
-    app.run(debug=True)
+CORS(app)
+
+@app.route('/')
+def home():
+    return "API de Saúde Mental está funcionando!"
+
+if __name__ == '__main__':
+    print("API de Saúde Mental ESTA NO LOOP DO IF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    # Obtém a porta do ambiente ou usa 5000 como padrão
+    port = int(os.environ.get('PORT', 5000))
+    # Configura o host para aceitar conexões de qualquer IP
+    app.run(host='0.0.0.0', port=port, debug=False)
 
 """#IMPORTANDO O DATASET"""
 
