@@ -27,16 +27,51 @@ import random
 from pprint import pprint
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import joblib
 
 # Configuração do servidor Flask
 app = Flask(__name__)
 CORS(app)
 
+# Carregar o modelo treinado
+try:
+    model = joblib.load('model.joblib')
+    scaler = joblib.load('scaler.joblib')
+    print("Modelo carregado com sucesso!")
+except:
+    print("Modelo não encontrado. Execute o script de treinamento primeiro.")
+    model = None
+    scaler = None
+
 @app.route('/')
 def home():
     return "API de Saúde Mental está funcionando!"
 
+@app.route('/predict', methods=['POST'])
+def predict():
+    if model is None:
+        return jsonify({"error": "Modelo não carregado"}), 500
+    
+    try:
+        data = request.get_json()
+        # Converter os dados recebidos em um DataFrame
+        input_data = pd.DataFrame([data])
+        
+        # Aplicar o mesmo pré-processamento usado no treinamento
+        # Aqui você deve adicionar o mesmo pré-processamento que foi usado no treinamento
+        
+        # Fazer a previsão
+        prediction = model.predict(input_data)
+        
+        return jsonify({
+            "prediction": int(prediction[0]),
+            "probability": float(model.predict_proba(input_data)[0][1])
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
 if __name__ == '__main__':
+    print("API de Saúde Mental ESTA NO LOOP DO IF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     # Obtém a porta do ambiente ou usa 5000 como padrão
     port = int(os.environ.get('PORT', 5000))
     # Configura o host para aceitar conexões de qualquer IP
