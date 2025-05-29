@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
@@ -579,3 +580,15 @@ plt.title("Matriz de Confusão - Gradient Boosting")
 plt.xlabel("Previsão")
 plt.ylabel("Real")
 plt.show()
+
+# Configuração do servidor Flask
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/')
+def home():
+    return "API de Saúde Mental está funcionando!"
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
