@@ -78,10 +78,7 @@ def predict():
         return jsonify({"error": str(e)}), 400
 
 if __name__ == '__main__':
-    # Obtém a porta do ambiente ou usa 5000 como padrão
-    port = int(os.environ.get('PORT', 5000))
-    # Configura o host para aceitar conexões de qualquer IP
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(debug=True)
 
 
 """#IMPORTANDO O DATASET"""
