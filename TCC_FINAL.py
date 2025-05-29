@@ -33,15 +33,17 @@ import joblib
 app = Flask(__name__)
 CORS(app)
 
-# Carregar o modelo treinado
+# Carregar o modelo treinado e as colunas
 try:
     model = joblib.load('model.joblib')
     scaler = joblib.load('scaler.joblib')
+    feature_columns = joblib.load('feature_columns.joblib')
     print("Modelo carregado com sucesso!")
-except:
-    print("Modelo não encontrado. Execute o script de treinamento primeiro.")
+except Exception as e:
+    print(f"Erro ao carregar o modelo: {str(e)}")
     model = None
     scaler = None
+    feature_columns = None
 
 @app.route('/')
 def home():
@@ -54,24 +56,28 @@ def predict():
     
     try:
         data = request.get_json()
-        # Converter os dados recebidos em um DataFrame
-        input_data = pd.DataFrame([data])
         
-        # Aplicar o mesmo pré-processamento usado no treinamento
-        # Aqui você deve adicionar o mesmo pré-processamento que foi usado no treinamento
+        # Garantir que todas as colunas necessárias estejam presentes
+        input_data = pd.DataFrame([data])
+        for col in feature_columns:
+            if col not in input_data.columns:
+                input_data[col] = 0
+        
+        # Reordenar as colunas para corresponder ao treinamento
+        input_data = input_data[feature_columns]
         
         # Fazer a previsão
         prediction = model.predict(input_data)
+        probability = model.predict_proba(input_data)[0][1]
         
         return jsonify({
             "prediction": int(prediction[0]),
-            "probability": float(model.predict_proba(input_data)[0][1])
+            "probability": float(probability)
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
 if __name__ == '__main__':
-    print("API de Saúde Mental ESTA NO LOOP DO IF!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     # Obtém a porta do ambiente ou usa 5000 como padrão
     port = int(os.environ.get('PORT', 5000))
     # Configura o host para aceitar conexões de qualquer IP
