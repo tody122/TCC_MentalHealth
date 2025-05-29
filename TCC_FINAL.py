@@ -172,7 +172,7 @@ for col in df_Numerico_Relevantes.columns:
 
 df_Numerico_Relevantes.isnull().sum().sort_values(ascending=False)
 
-display(df_Numerico_Relevantes.head())
+print(df_Numerico_Relevantes.head())
 
 """#Teste
 
