@@ -28,6 +28,21 @@ from pprint import pprint
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
+# Configuração do servidor Flask
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/')
+def home():
+    return "API de Saúde Mental está funcionando!"
+
+if __name__ == '__main__':
+    # Obtém a porta do ambiente ou usa 5000 como padrão
+    port = int(os.environ.get('PORT', 5000))
+    # Configura o host para aceitar conexões de qualquer IP
+    app.run(host='0.0.0.0', port=port, debug=False)
+
+
 """#IMPORTANDO O DATASET"""
 
 df = pd.read_csv("Mentalhealth.csv", low_memory=False)
@@ -581,16 +596,3 @@ plt.xlabel("Previsão")
 plt.ylabel("Real")
 plt.show()
 
-# Configuração do servidor Flask
-app = Flask(__name__)
-CORS(app)
-
-@app.route('/')
-def home():
-    return "API de Saúde Mental está funcionando!"
-
-if __name__ == '__main__':
-    # Obtém a porta do ambiente ou usa 5000 como padrão
-    port = int(os.environ.get('PORT', 5000))
-    # Configura o host para aceitar conexões de qualquer IP
-    app.run(host='0.0.0.0', port=port, debug=False)
