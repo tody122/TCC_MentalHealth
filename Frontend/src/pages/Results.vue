@@ -10,7 +10,7 @@ onMounted(() => {
   // Simulando um resultado para demonstração
   setTimeout(() => {
     resultado.value = {
-      tracos: 'Apresenta traços de ansiedade',
+      tracos: 'Apresenta traços de ansiedade e depressão',
       recomendacoes: [
         'Considere conversar com um profissional de saúde mental',
         'Mantenha uma rotina regular de exercícios físicos',

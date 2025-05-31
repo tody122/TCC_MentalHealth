@@ -1,9 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useRespostasStore } from '../stores/respostas'
 
 const router = useRouter()
-const activeTab = ref('form')
+const respostasStore = useRespostasStore()
 const formData = ref({
   idade: '',
   genero: '',
@@ -12,50 +13,63 @@ const formData = ref({
   idade_primeiro_sintoma: '',
   divisao_renda: '',
   ultima_serie_ciencias: '',
+  perda_negocio_covid: '',
   comentario: ''
 })
 
-const respostas = ref([])
+const opcoesGenero = [
+  { value: 'masculino', text: 'Masculino' },
+  { value: 'feminino', text: 'Feminino' },
+  { value: 'outro', text: 'Outro' }
+]
 
 const opcoesFamiliaDepressao = [
-  'Sim',
-  'Não',
-  'Não quero responder',
-  'Não sei'
+  { value: '1', text: 'Sim' },
+  { value: '0', text: 'Não' },
+  { value: 'null', text: 'Não quero responder' },
+  { value: 'null', text: 'Não sei' }
 ]
 
 const opcoesRendaFamiliar = [
-  'Vivendo confortavelmente com a renda atual',
-  'Sobrevivendo com a renda atual',
-  'Encontrando dificuldades com a renda atual',
-  'Encontrando muitas dificuldades com a renda atual',
-  'Não quero responder',
-  'Não sei'
+  { value: 'confortavel', text: 'Vivendo confortavelmente com a renda atual' },
+  { value: 'sobrevivendo', text: 'Sobrevivendo com a renda atual' },
+  { value: 'dificuldades', text: 'Encontrando dificuldades com a renda atual' },
+  { value: 'muitas_dificuldades', text: 'Encontrando muitas dificuldades com a renda atual' },
+  { value: 'null', text: 'Não quero responder' },
+  { value: 'null', text: 'Não sei' }
 ]
 
 const opcoesIdadePrimeiroSintoma = [
-  'Menos que 13 anos',
-  '13-19',
-  '20-29',
-  '30-39',
-  '40 ou mais velho',
-  'Não quero responder',
-  'Não sei'
+  { value: 'menos_13', text: 'Menos que 13 anos' },
+  { value: '13_19', text: '13-19' },
+  { value: '20_29', text: '20-29' },
+  { value: '30_39', text: '30-39' },
+  { value: '40_mais', text: '40 ou mais velho' },
+  { value: 'null', text: 'Não quero responder' },
+  { value: 'null', text: 'Não sei' }
 ]
 
 const opcoesDivisaoRenda = [
-  '20% mais pobres',
-  '20% pobres',
-  '20% média',
-  '20% média alta',
-  '20% ricos'
+  { value: '5', text: '20% mais pobres' },
+  { value: '4', text: '20% pobres' },
+  { value: '3', text: '20% média' },
+  { value: '2', text: '20% média alta' },
+  { value: '1', text: '20% ricos' }
 ]
 
 const opcoesUltimaSerieCiencias = [
-  'Nenhuma',
-  'Primário',
-  'Fundamental ou Ensino Médio',
-  'Faculdade'
+  { value: 'nenhuma', text: 'Nenhuma' },
+  { value: 'primario', text: 'Primário' },
+  { value: 'fundamental_medio', text: 'Fundamental ou Ensino Médio' },
+  { value: 'faculdade', text: 'Faculdade' }
+]
+
+const opcoesPerdaNegocioCovid = [
+  { value: '1', text: 'Sim' },
+  { value: '0', text: 'Não' },
+  { value: 'null', text: 'Não se encaixa com o perguntado' },
+  { value: 'null', text: 'Não quero responder' },
+  { value: 'null', text: 'Não sei' }
 ]
 
 const enviarFormulario = () => {
@@ -64,7 +78,7 @@ const enviarFormulario = () => {
     data: new Date().toLocaleString(),
     ...formData.value
   }
-  respostas.value.push(novaResposta)
+  respostasStore.adicionarResposta(novaResposta)
   console.log('Dados do formulário:', novaResposta)
 
   // Redirecionar para a página de resultados
@@ -72,7 +86,7 @@ const enviarFormulario = () => {
 
   // Gerar e baixar CSV
   const criarCSV = (resposta) => {
-    const cabecalho = ['id', 'data', 'idade', 'genero', 'familia_depressao', 'renda_familiar', 'idade_primeiro_sintoma', 'divisao_renda', 'ultima_serie_ciencias', 'comentario'];
+    const cabecalho = ['id', 'data', 'idade', 'genero', 'familia_depressao', 'renda_familiar', 'idade_primeiro_sintoma', 'divisao_renda', 'ultima_serie_ciencias', 'perda_negocio_covid', 'comentario'];
     // Garante que os valores nulos ou indefinidos sejam strings vazias e que strings com vírgula sejam envolvidas por aspas
     const escaparValorCSV = (valor) => {
       if (valor === null || valor === undefined) {
@@ -95,6 +109,7 @@ const enviarFormulario = () => {
       escaparValorCSV(resposta.idade_primeiro_sintoma),
       escaparValorCSV(resposta.divisao_renda),
       escaparValorCSV(resposta.ultima_serie_ciencias),
+      escaparValorCSV(resposta.perda_negocio_covid),
       escaparValorCSV(resposta.comentario)
     ].join(',');
 
@@ -126,6 +141,7 @@ const enviarFormulario = () => {
     idade_primeiro_sintoma: '',
     divisao_renda: '',
     ultima_serie_ciencias: '',
+    perda_negocio_covid: '',
     comentario: ''
   }
 }
@@ -133,22 +149,7 @@ const enviarFormulario = () => {
 
 <template>
   <div class="form-page">
-    <div class="tabs">
-      <button
-        :class="['tab-button', { active: activeTab === 'form' }]"
-        @click="activeTab = 'form'"
-      >
-        Formulário
-      </button>
-      <button
-        :class="['tab-button', { active: activeTab === 'data' }]"
-        @click="activeTab = 'data'"
-      >
-        Dados (Provisório)
-      </button>
-    </div>
-
-    <div v-if="activeTab === 'form'" class="form-container">
+    <div class="form-container">
       <div class="form-header">
         <div class="header-content">
           <h1>Avaliação de Bem-estar Mental</h1>
@@ -177,17 +178,9 @@ const enviarFormulario = () => {
             <div class="form-group">
               <label>Gênero *</label>
               <div class="radio-group">
-                <label>
-                  <input type="radio" v-model="formData.genero" value="masculino" required>
-                  Masculino
-                </label>
-                <label>
-                  <input type="radio" v-model="formData.genero" value="feminino">
-                  Feminino
-                </label>
-                <label>
-                  <input type="radio" v-model="formData.genero" value="outro">
-                  Outro
+                <label v-for="opcao in opcoesGenero" :key="opcao.value">
+                  <input type="radio" v-model="formData.genero" :value="opcao.value" required>
+                  {{ opcao.text }}
                 </label>
               </div>
             </div>
@@ -206,8 +199,8 @@ const enviarFormulario = () => {
               class="select-input"
             >
               <option value="">Selecione uma opção</option>
-              <option v-for="opcao in opcoesFamiliaDepressao" :key="opcao" :value="opcao">
-                {{ opcao }}
+              <option v-for="opcao in opcoesFamiliaDepressao" :key="opcao.value" :value="opcao.value">
+                {{ opcao.text }}
               </option>
             </select>
           </div>
@@ -221,8 +214,8 @@ const enviarFormulario = () => {
               class="select-input"
             >
               <option value="">Selecione uma opção</option>
-              <option v-for="opcao in opcoesRendaFamiliar" :key="opcao" :value="opcao">
-                {{ opcao }}
+              <option v-for="opcao in opcoesRendaFamiliar" :key="opcao.value" :value="opcao.value">
+                {{ opcao.text }}
               </option>
             </select>
           </div>
@@ -236,8 +229,8 @@ const enviarFormulario = () => {
               class="select-input"
             >
               <option value="">Selecione uma opção</option>
-              <option v-for="opcao in opcoesIdadePrimeiroSintoma" :key="opcao" :value="opcao">
-                {{ opcao }}
+              <option v-for="opcao in opcoesIdadePrimeiroSintoma" :key="opcao.value" :value="opcao.value">
+                {{ opcao.text }}
               </option>
             </select>
           </div>
@@ -251,8 +244,8 @@ const enviarFormulario = () => {
               class="select-input"
             >
               <option value="">Selecione uma opção</option>
-              <option v-for="opcao in opcoesDivisaoRenda" :key="opcao" :value="opcao">
-                {{ opcao }}
+              <option v-for="opcao in opcoesDivisaoRenda" :key="opcao.value" :value="opcao.value">
+                {{ opcao.text }}
               </option>
             </select>
           </div>
@@ -266,8 +259,23 @@ const enviarFormulario = () => {
               class="select-input"
             >
               <option value="">Selecione uma opção</option>
-              <option v-for="opcao in opcoesUltimaSerieCiencias" :key="opcao" :value="opcao">
-                {{ opcao }}
+              <option v-for="opcao in opcoesUltimaSerieCiencias" :key="opcao.value" :value="opcao.value">
+                {{ opcao.text }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="perda_negocio_covid">Você perdeu seu negócio ou trabalho depois do coronavirus? *</label>
+            <select
+              id="perda_negocio_covid"
+              v-model="formData.perda_negocio_covid"
+              required
+              class="select-input"
+            >
+              <option value="">Selecione uma opção</option>
+              <option v-for="opcao in opcoesPerdaNegocioCovid" :key="opcao.value" :value="opcao.value">
+                {{ opcao.text }}
               </option>
             </select>
           </div>
@@ -292,103 +300,12 @@ const enviarFormulario = () => {
         </div>
       </form>
     </div>
-
-    <div v-if="activeTab === 'data'" class="data-container">
-      <h2>Dados Coletados (Provisório)</h2>
-      <div class="data-content">
-        <div v-if="respostas.length === 0" class="no-data">
-          Nenhuma resposta registrada ainda.
-        </div>
-        <div v-else class="data-list">
-          <div v-for="resposta in respostas" :key="resposta.id" class="data-item">
-            <pre>{{ JSON.stringify(resposta, null, 2) }}</pre>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <style scoped>
 .form-page {
   width: 100%;
-}
-
-.tabs {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 1rem;
-}
-
-.tab-button {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  background: none;
-  font-size: 16px;
-  font-weight: 500;
-  color: #666;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.tab-button:hover {
-  background-color: #f0f0f0;
-}
-
-.tab-button.active {
-  background-color: #3498db;
-  color: white;
-}
-
-.data-container {
-  background-color: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-}
-
-.data-container h2 {
-  color: #2c3e50;
-  margin-bottom: 1.5rem;
-  font-size: 24px;
-}
-
-.data-content {
-  background-color: #f8f9fa;
-  border-radius: 8px;
-  padding: 1rem;
-}
-
-.no-data {
-  text-align: center;
-  color: #666;
-  padding: 2rem;
-  font-size: 16px;
-}
-
-.data-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.data-item {
-  background-color: white;
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.data-item pre {
-  margin: 0;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 14px;
-  color: #2c3e50;
 }
 
 .form-container {
