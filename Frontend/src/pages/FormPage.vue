@@ -2,19 +2,17 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useRespostasStore } from '../stores/respostas'
+import { sendDataToBackend } from '../services/api'
 
 const router = useRouter()
 const respostasStore = useRespostasStore()
 const formData = ref({
-  idade: '',
-  genero: '',
-  familia_depressao: '',
-  renda_familiar: '',
-  idade_primeiro_sintoma: '',
-  divisao_renda: '',
-  ultima_serie_ciencias: '',
-  perda_negocio_covid: '',
-  comentario: ''
+  MH6: '',
+  Subjective_Income: '',
+  MH7B2: '',
+  Household_Income: '',
+  W3: '',
+  WP21759: '',
 })
 
 const opcoesGenero = [
@@ -24,29 +22,31 @@ const opcoesGenero = [
 ]
 
 const opcoesFamiliaDepressao = [
-  { value: '1', text: 'Sim' },
-  { value: '0', text: 'Não' },
-  { value: 'null', text: 'Não quero responder' },
-  { value: 'null', text: 'Não sei' }
+  { value: '2', text: 'Sim' },
+  { value: '1', text: 'Não' },
+  { value: '2', text: 'Não quero responder' },
+  { value: '2', text: 'Não sei' }
 ]
 
 const opcoesRendaFamiliar = [
-  { value: 'confortavel', text: 'Vivendo confortavelmente com a renda atual' },
-  { value: 'sobrevivendo', text: 'Sobrevivendo com a renda atual' },
-  { value: 'dificuldades', text: 'Encontrando dificuldades com a renda atual' },
-  { value: 'muitas_dificuldades', text: 'Encontrando muitas dificuldades com a renda atual' },
-  { value: 'null', text: 'Não quero responder' },
-  { value: 'null', text: 'Não sei' }
+  { value: '1', text: 'Vivendo confortavelmente com a renda atual' },
+  { value: '2', text: 'Sobrevivendo com a renda atual' },
+  { value: '3', text: 'Encontrando dificuldades com a renda atual' },
+  { value: '4', text: 'Encontrando muitas dificuldades com a renda atual' },
+  { value: '2', text: 'Não quero responder' },
+  { value: '2', text: 'Não sei' }
 ]
 
 const opcoesIdadePrimeiroSintoma = [
-  { value: 'menos_13', text: 'Menos que 13 anos' },
-  { value: '13_19', text: '13-19' },
-  { value: '20_29', text: '20-29' },
-  { value: '30_39', text: '30-39' },
-  { value: '40_mais', text: '40 ou mais velho' },
-  { value: 'null', text: 'Não quero responder' },
-  { value: 'null', text: 'Não sei' }
+
+  { value: '1', text: 'Menos que 13 anos' },
+  { value: '2', text: '13-19' },
+  { value: '3', text: '20-29' },
+  { value: '4', text: '30-39' },
+  { value: '5', text: '40 ou mais velho' },
+  { value: '1', text: 'Não quero responder' },
+  { value: '1', text: 'Não sei' },
+  { value: '5', text: 'Não sinto os sintomas' }
 ]
 
 const opcoesDivisaoRenda = [
@@ -58,93 +58,107 @@ const opcoesDivisaoRenda = [
 ]
 
 const opcoesUltimaSerieCiencias = [
-  { value: 'nenhuma', text: 'Nenhuma' },
-  { value: 'primario', text: 'Primário' },
-  { value: 'fundamental_medio', text: 'Fundamental ou Ensino Médio' },
-  { value: 'faculdade', text: 'Faculdade' }
+  { value: '1', text: 'Nenhuma' },
+  { value: '2', text: 'Primário' },
+  { value: '3', text: 'Fundamental ou Ensino Médio' },
+  { value: '4', text: 'Faculdade' }
 ]
 
 const opcoesPerdaNegocioCovid = [
-  { value: '1', text: 'Sim' },
-  { value: '0', text: 'Não' },
-  { value: 'null', text: 'Não se encaixa com o perguntado' },
-  { value: 'null', text: 'Não quero responder' },
-  { value: 'null', text: 'Não sei' }
+  { value: '2', text: 'Sim' },
+  { value: '1', text: 'Não' },
+  { value: '3', text: 'Não se encaixa com o perguntado' },
+  { value: '2', text: 'Não quero responder' },
+  { value: '2', text: 'Não sei' }
 ]
 
-const enviarFormulario = () => {
-  const novaResposta = {
-    id: Date.now(),
-    data: new Date().toLocaleString(),
-    ...formData.value
+const validateForm = () => {
+  // Validar idade
+  if (!formData.value.idade || formData.value.idade < 0 || formData.value.idade > 120) {
+    alert('Por favor, insira uma idade válida (entre 0 e 120 anos)');
+    return false;
   }
-  respostasStore.adicionarResposta(novaResposta)
-  console.log('Dados do formulário:', novaResposta)
 
-  // Redirecionar para a página de resultados
-  router.push('/resultados')
+  // Validar gênero
+  if (!formData.value.genero) {
+    alert('Por favor, selecione seu gênero');
+    return false;
+  }
 
-  // Gerar e baixar CSV
-  const criarCSV = (resposta) => {
-    const cabecalho = ['id', 'data', 'idade', 'genero', 'familia_depressao', 'renda_familiar', 'idade_primeiro_sintoma', 'divisao_renda', 'ultima_serie_ciencias', 'perda_negocio_covid', 'comentario'];
-    // Garante que os valores nulos ou indefinidos sejam strings vazias e que strings com vírgula sejam envolvidas por aspas
-    const escaparValorCSV = (valor) => {
-      if (valor === null || valor === undefined) {
-        return '';
-      }
-      const strValor = String(valor);
-      if (strValor.includes(',') || strValor.includes('\n') || strValor.includes('"')) {
-        return `"${strValor.replace(/"/g, '""')}"`; // Aspas duplas são escapadas com outras aspas duplas
-      }
-      return strValor;
-    };
+  // Validar família depressão
+  if (!formData.value.familia_depressao) {
+    alert('Por favor, responda sobre depressão/ansiedade na família');
+    return false;
+  }
 
-    const linha = [
-      escaparValorCSV(resposta.id),
-      escaparValorCSV(resposta.data),
-      escaparValorCSV(resposta.idade),
-      escaparValorCSV(resposta.genero),
-      escaparValorCSV(resposta.familia_depressao),
-      escaparValorCSV(resposta.renda_familiar),
-      escaparValorCSV(resposta.idade_primeiro_sintoma),
-      escaparValorCSV(resposta.divisao_renda),
-      escaparValorCSV(resposta.ultima_serie_ciencias),
-      escaparValorCSV(resposta.perda_negocio_covid),
-      escaparValorCSV(resposta.comentario)
-    ].join(',');
+  // Validar renda familiar
+  if (!formData.value.renda_familiar) {
+    alert('Por favor, selecione sua situação de renda familiar');
+    return false;
+  }
 
-    return cabecalho.join(',') + '\n' + linha;
+  // Validar idade primeiro sintoma
+  if (!formData.value.idade_primeiro_sintoma) {
+    alert('Por favor, selecione a idade do primeiro sintoma');
+    return false;
+  }
+
+  // Validar divisão renda
+  if (!formData.value.divisao_renda) {
+    alert('Por favor, selecione sua divisão de renda');
+    return false;
+  }
+
+  // Validar última série ciências
+  if (!formData.value.ultima_serie_ciencias) {
+    alert('Por favor, selecione sua última série em ciências');
+    return false;
+  }
+
+  // Validar perda negócio covid
+  if (!formData.value.perda_negocio_covid) {
+    alert('Por favor, responda sobre perda de negócio/trabalho após covid');
+    return false;
+  }
+
+  return true;
+};
+
+const handleSubmit = async () => {
+  if (!validateForm()) return;
+
+  const novaResposta = {
+    MH6: formData.value.familia_depressao === 'null' ? '0' : formData.value.familia_depressao,
+    Subjective_Income: formData.value.renda_familiar === 'null' ? '0' : formData.value.renda_familiar,
+    MH7B2: formData.value.idade_primeiro_sintoma === 'null' ? '0' : formData.value.idade_primeiro_sintoma,
+    Household_Income: formData.value.divisao_renda === 'null' ? '0' : formData.value.divisao_renda,
+    W3: formData.value.ultima_serie_ciencias === 'null' ? '0' : formData.value.ultima_serie_ciencias,
+    WP21759: formData.value.perda_negocio_covid === 'null' ? '0' : formData.value.perda_negocio_covid
   };
 
-  const csvContent = criarCSV(novaResposta);
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-  const link = document.createElement('a');
-  if (link.download !== undefined) { // Feature detection
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `resposta_${novaResposta.id}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  } else {
-    alert("Seu navegador não suporta o download automático. Por favor, copie os dados manualmente se necessário.");
-  }
+  // Mostrar o JSON que será enviado
+  console.log('Dados enviados:', JSON.stringify(novaResposta, null, 2));
 
-  // Limpar o formulário
-  formData.value = {
-    idade: '',
-    genero: '',
-    familia_depressao: '',
-    renda_familiar: '',
-    idade_primeiro_sintoma: '',
-    divisao_renda: '',
-    ultima_serie_ciencias: '',
-    perda_negocio_covid: '',
-    comentario: ''
+  try {
+    const response = await sendDataToBackend(novaResposta);
+    // Mostrar a resposta do servidor
+    console.log('Resposta do servidor (bruta):', response);
+    console.log('Tipo da resposta:', typeof response);
+    console.log('Resposta do servidor (stringify):', JSON.stringify(response, null, 2));
+
+    // Armazenar a resposta da API no store
+    const respostaCompleta = {
+      ...response,
+      dados_enviados: novaResposta
+    };
+    console.log('Armazenando no store:', respostaCompleta);
+    respostasStore.adicionarResposta(respostaCompleta);
+    router.push('/resultados');
+  } catch (error) {
+    console.error('Erro ao enviar dados:', error);
+    alert('Erro ao enviar dados. Por favor, tente novamente.');
   }
-}
+};
 </script>
 
 <template>
@@ -158,7 +172,7 @@ const enviarFormulario = () => {
         </div>
       </div>
 
-      <form @submit.prevent="enviarFormulario" class="form-content">
+      <form @submit.prevent="handleSubmit" class="form-content">
         <div class="form-section">
           <h2>Informações Básicas</h2>
           <div class="form-row">

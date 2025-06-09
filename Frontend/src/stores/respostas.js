@@ -7,6 +7,9 @@ export const useRespostasStore = defineStore('respostas', {
   actions: {
     adicionarResposta(resposta) {
       this.respostas.push(resposta)
+    },
+    limparRespostas() {
+      this.respostas = []
     }
   }
 })

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// URL base do seu backend no Render
-const API_URL = 'https://tcc-mentalhealth.onrender.com';
+// URL base usando o proxy do Vite
+const API_URL = '/api';
 
 const api = axios.create({
     baseURL: API_URL,
