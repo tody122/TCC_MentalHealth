@@ -1,30 +1,52 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useRespostasStore } from '../stores/respostas'
 
 const router = useRouter()
+const respostasStore = useRespostasStore()
 const resultado = ref(null)
-const loading = ref(true)
+
+const getGrauGravidade = (probabilidade) => {
+  const prob = probabilidade * 100;
+  if (prob <= 20) return {
+    titulo: "Baixa probabilidade de sintomas relacionados",
+    recomendacao: "Ainda que os indicadores sejam baixos, é importante manter hábitos saudáveis e cuidar da saúde mental. Em caso de dúvidas ou mudanças no bem-estar, a orientação de um profissional qualificado é sempre recomendada."
+  };
+  if (prob <= 40) return {
+    titulo: "Atenção inicial necessária",
+    recomendacao: "Os dados sugerem uma atenção inicial. Mesmo em estágios leves, procurar um profissional qualificado pode oferecer suporte e esclarecimento adequados."
+  };
+  if (prob <= 60) return {
+    titulo: "Sinais que merecem atenção",
+    recomendacao: "Este resultado aponta sinais que merecem atenção. A avaliação com um profissional da saúde mental é altamente recomendada para compreender melhor a situação e buscar orientações adequadas."
+  };
+  if (prob <= 80) return {
+    titulo: "Nível significativo de indícios",
+    recomendacao: "A análise indica um nível significativo de possíveis indícios. Buscar o acompanhamento de um profissional qualificado é uma medida essencial para cuidado e prevenção."
+  };
+  return {
+    titulo: "Fortes indícios de atenção necessária",
+    recomendacao: "Este resultado sugere fortes indícios que podem estar associados a quadros de depressão ou ansiedade. Recomendamos com ênfase que procure um profissional de saúde mental para avaliação individual e orientação especializada."
+  };
+}
+
+const getMensagemPredicao = (predicao) => {
+  console.log('Valor da predição recebido:', predicao, 'Tipo:', typeof predicao)
+  if (predicao === "1" || predicao === 1) return "Você apresenta traços de ansiedade ou depressão"
+  if (predicao === "0" || predicao === 0) return "Você não apresenta traços de ansiedade ou depressão"
+  return "Resultado não disponível"
+}
 
 onMounted(() => {
-  // Simulando um resultado para demonstração
-  setTimeout(() => {
-    resultado.value = {
-      tracos: 'Apresenta traços de ansiedade',
-      recomendacoes: [
-        'Considere conversar com um profissional de saúde mental',
-        'Mantenha uma rotina regular de exercícios físicos',
-        'Pratique técnicas de relaxamento e mindfulness',
-        'Mantenha contato regular com amigos e familiares'
-      ],
-      fatores_identificados: [
-        'Estresse relacionado à situação financeira',
-        'Histórico familiar de problemas de saúde mental',
-        'Baixo nível de satisfação com a vida atual'
-      ]
-    }
-    loading.value = false
-  }, 2000)
+  // Pegar a última resposta do store
+  const ultimaResposta = respostasStore.respostas[respostasStore.respostas.length - 1]
+  console.log('Última resposta do store:', ultimaResposta)
+
+  if (ultimaResposta) {
+    resultado.value = ultimaResposta
+    console.log('Resultado definido:', resultado.value)
+  }
 })
 
 const voltarParaInicio = () => {
@@ -34,53 +56,36 @@ const voltarParaInicio = () => {
 
 <template>
   <div class="results-container">
-    <div v-if="loading" class="loading-container">
-      <div class="loading-spinner"></div>
-      <p>Analisando suas respostas...</p>
-    </div>
-
-    <div v-else class="results-content">
+    <div class="results-content">
       <div class="results-header">
         <h1>Resultado da Análise</h1>
-        <p class="subtitle">Baseado nas suas respostas, geramos o seguinte diagnóstico preliminar</p>
       </div>
 
-      <div class="results-grid">
-        <!-- Traços Identificados -->
-        <div class="result-card traits">
-          <h2>Traços Identificados</h2>
-          <div class="traits-indicator">
-            {{ resultado.tracos }}
+      <div v-if="resultado" class="results-main">
+        <div class="prediction-section">
+          <h2>Predição</h2>
+          <div class="prediction-result" :class="{
+            'positive-result': resultado.previsao === '1' || resultado.previsao === 1,
+            'negative-result': resultado.previsao === '0' || resultado.previsao === 0
+          }">
+            {{ getMensagemPredicao(resultado.previsao) }}
           </div>
         </div>
 
-        <!-- Fatores Identificados -->
-        <div class="result-card factors">
-          <h2>Fatores Identificados</h2>
-          <ul class="factors-list">
-            <li v-for="(fator, index) in resultado.fatores_identificados" :key="index">
-              <span class="factor-icon">•</span>
-              {{ fator }}
-            </li>
-          </ul>
-        </div>
-
-        <!-- Recomendações -->
-        <div class="result-card recommendations">
-          <h2>Recomendações</h2>
-          <ul class="recommendations-list">
-            <li v-for="(recomendacao, index) in resultado.recomendacoes" :key="index">
-              <span class="recommendation-icon">✓</span>
-              {{ recomendacao }}
-            </li>
-          </ul>
+        <div class="analysis-section">
+          <h2>Análise Detalhada</h2>
+          <div class="analysis-content">
+            <h3 class="result-title">{{ getGrauGravidade(resultado.probabilidade_doente).titulo }}</h3>
+            <p class="result-recommendation">{{ getGrauGravidade(resultado.probabilidade_doente).recomendacao }}</p>
+          </div>
         </div>
       </div>
 
+      <div v-else class="no-results">
+        <p>Nenhum resultado disponível</p>
+      </div>
+
       <div class="results-footer">
-        <div class="disclaimer">
-          <p>⚠️ Este é um diagnóstico preliminar baseado em suas respostas. Para um diagnóstico completo e tratamento adequado, consulte um profissional de saúde mental.</p>
-        </div>
         <button @click="voltarParaInicio" class="back-button">
           Voltar para o Início
         </button>
@@ -97,42 +102,9 @@ const voltarParaInicio = () => {
   background-color: #f8f9fa;
 }
 
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 400px;
-}
-
-.loading-container p {
-  color: #1a3a4a;
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-
-.loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #e3f0fc;
-  border-top: 5px solid #217dbb;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 1rem;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
 .results-header {
   text-align: center;
   margin-bottom: 3rem;
-  background-color: white;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .results-header h1 {
@@ -142,88 +114,94 @@ const voltarParaInicio = () => {
   font-weight: 700;
 }
 
-.subtitle {
-  color: #2c3e50;
-  font-size: 1.2rem;
-  font-weight: 500;
-}
-
-.results-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
-}
-
-.result-card {
-  background: white;
-  border-radius: 16px;
+.results-main {
+  max-width: 800px;
+  margin: 0 auto;
   padding: 2rem;
+  background-color: white;
+  border-radius: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.result-card h2 {
+.prediction-section,
+.analysis-section {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.prediction-section:last-child,
+.analysis-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+h2 {
   color: #1a3a4a;
-  font-size: 1.5rem;
-  margin-bottom: 1.5rem;
-  text-align: center;
-  font-weight: 600;
-}
-
-.traits {
-  text-align: center;
-}
-
-.traits-indicator {
   font-size: 1.8rem;
+  margin-bottom: 1.5rem;
   font-weight: 600;
+}
+
+.prediction-result {
+  font-size: 1.4rem;
+  color: #2c3e50;
   padding: 1.5rem;
   border-radius: 8px;
-  margin-bottom: 1.5rem;
-  background-color: #f0f7ff;
-  color: #1a3a4a;
-  border: 2px solid #217dbb;
+  text-align: center;
+  font-weight: 500;
+  transition: all 0.3s ease;
 }
 
-.factors-list, .recommendations-list {
-  list-style: none;
-  padding: 0;
+.prediction-result.positive-result {
+  background-color: #ffebee;
+  border: 2px solid #f44336;
+  color: #d32f2f;
 }
 
-.factors-list li, .recommendations-list li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
+.prediction-result.negative-result {
+  background-color: #e8f5e9;
+  border: 2px solid #4caf50;
+  color: #2e7d32;
+}
+
+.analysis-content {
   padding: 1rem;
-  background-color: #f0f7ff;
-  border-radius: 8px;
-  color: #1a3a4a;
-  font-size: 1.1rem;
-  line-height: 1.4;
 }
 
-.factor-icon, .recommendation-icon {
-  margin-right: 1rem;
-  color: #217dbb;
-  font-weight: bold;
+.result-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #1a3a4a;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #3498db;
+}
+
+.result-recommendation {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #2c3e50;
+  text-align: justify;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.no-results {
+  text-align: center;
+  padding: 3rem;
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: #666;
   font-size: 1.2rem;
 }
 
-.disclaimer {
-  background-color: #fff3cd;
-  border: 1px solid #ffeeba;
-  color: #856404;
-  padding: 1.5rem;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-  text-align: center;
-  font-size: 1.1rem;
-  font-weight: 500;
-  line-height: 1.5;
-}
-
 .back-button {
-  background-color: #217dbb;
+  background-color: #3498db;
   color: white;
   padding: 1rem 2rem;
   border: none;
@@ -233,31 +211,34 @@ const voltarParaInicio = () => {
   cursor: pointer;
   transition: all 0.3s ease;
   display: block;
-  margin: 0 auto;
+  margin: 2rem auto 0;
 }
 
 .back-button:hover {
-  background-color: #1a6aa3;
+  background-color: #2980b9;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(33, 125, 187, 0.2);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
 }
 
 @media (max-width: 768px) {
-  .results-grid {
-    grid-template-columns: 1fr;
+  .results-container {
+    padding: 1rem;
+  }
+
+  .results-main {
+    padding: 1rem;
   }
 
   .results-header h1 {
     font-size: 2rem;
   }
 
-  .factors-list li, .recommendations-list li {
-    font-size: 1rem;
+  .result-title {
+    font-size: 1.4rem;
   }
 
-  .traits-indicator {
-    font-size: 1.5rem;
-    padding: 1rem;
+  .result-recommendation {
+    font-size: 1rem;
   }
 }
 </style>
