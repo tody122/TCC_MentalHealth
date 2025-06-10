@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import joblib
 import numpy as np
 import logging
@@ -12,6 +13,8 @@ pipeline = joblib.load('pipeline_mlp.pkl')
 THRESHOLD = 0.4
 
 app = Flask(__name__)
+# Habilitar CORS para todas as rotas
+CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "https://tcc-mental-health.vercel.app"]}})
 
 @app.route('/predict', methods=['POST'])
 def predict():
