@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // URL base do backend
-const API_URL = 'https://api-mental-health.onrender.com';
+const API_URL = 'http://127.0.0.1:10000';
 
 const api = axios.create({
     baseURL: API_URL,
