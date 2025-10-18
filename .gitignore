@@ -80,3 +80,17 @@ ENV/
 .Trashes
 ehthumbs.db
 Thumbs.db 
+
+# Ambiente Virtual
+Backend/venv/
+Backend/.venv/
+
+# Arquivos do Python
+Backend/__pycache__/
+Backend/*.pyc
+
+# Arquivos de IDE (ex: VS Code)
+Backend/.vscode/
+
+# Arquivos de sistema
+Backend/.DS_Store
