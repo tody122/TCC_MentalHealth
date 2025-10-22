@@ -6,70 +6,53 @@ import { sendDataToBackend } from '../services/api'
 
 const router = useRouter()
 const respostasStore = useRespostasStore()
+
+// Dados do formulário DASS-21
 const formData = ref({
-  MH6: '',
-  Subjective_Income: '',
-  MH7B2: '',
-  Household_Income: '',
-  W3: '',
-  WP21759: '',
+  idade: '',
+  genero: '',
+  data: Array(21).fill(null)
 })
 
+// Opções de gênero
 const opcoesGenero = [
   { value: 'masculino', text: 'Masculino' },
   { value: 'feminino', text: 'Feminino' },
   { value: 'outro', text: 'Outro' }
 ]
 
-const opcoesFamiliaDepressao = [
-  { value: '2', text: 'Sim' },
-  { value: '1', text: 'Não' },
-  { value: '2', text: 'Não quero responder' },
-  { value: '2', text: 'Não sei' }
+// Escala de resposta do DASS-21
+const opcoesDASS21 = [
+  { value: 0, text: 'Não se aplicou a mim de forma alguma' },
+  { value: 1, text: 'Aplicou-se a mim em algum grau, ou por pouco tempo' },
+  { value: 2, text: 'Aplicou-se a mim em um grau considerável, ou por uma boa parte do tempo' },
+  { value: 3, text: 'Aplicou-se a mim muito, ou na maior parte do tempo' }
 ]
 
-const opcoesRendaFamiliar = [
-  { value: '1', text: 'Vivendo confortavelmente com a renda atual' },
-  { value: '2', text: 'Sobrevivendo com a renda atual' },
-  { value: '3', text: 'Encontrando dificuldades com a renda atual' },
-  { value: '4', text: 'Encontrando muitas dificuldades com a renda atual' },
-  { value: '2', text: 'Não quero responder' },
-  { value: '2', text: 'Não sei' }
-]
-
-const opcoesIdadePrimeiroSintoma = [
-
-  { value: '1', text: 'Menos que 13 anos' },
-  { value: '2', text: '13-19' },
-  { value: '3', text: '20-29' },
-  { value: '4', text: '30-39' },
-  { value: '5', text: '40 ou mais velho' },
-  { value: '1', text: 'Não quero responder' },
-  { value: '1', text: 'Não sei' },
-  { value: '5', text: 'Não sinto os sintomas' }
-]
-
-const opcoesDivisaoRenda = [
-  { value: '5', text: '20% mais pobres' },
-  { value: '4', text: '20% pobres' },
-  { value: '3', text: '20% média' },
-  { value: '2', text: '20% média alta' },
-  { value: '1', text: '20% ricos' }
-]
-
-const opcoesUltimaSerieCiencias = [
-  { value: '1', text: 'Nenhuma' },
-  { value: '2', text: 'Primário' },
-  { value: '3', text: 'Fundamental ou Ensino Médio' },
-  { value: '4', text: 'Faculdade' }
-]
-
-const opcoesPerdaNegocioCovid = [
-  { value: '2', text: 'Sim' },
-  { value: '1', text: 'Não' },
-  { value: '3', text: 'Não se encaixa com o perguntado' },
-  { value: '2', text: 'Não quero responder' },
-  { value: '2', text: 'Não sei' }
+// Perguntas do DASS-21
+const perguntasDASS21 = [
+  // Depressão (1, 3, 4, 7, 8, 9, 10)
+  { id: 1, texto: 'Senti dificuldade para relaxar', categoria: 'depressao' },
+  { id: 2, texto: 'Tive boca seca', categoria: 'ansiedade' },
+  { id: 3, texto: 'Não consegui sentir nenhum sentimento positivo', categoria: 'depressao' },
+  { id: 4, texto: 'Tive dificuldade para respirar (ex: respiração ofegante, falta de ar na ausência de esforço físico)', categoria: 'ansiedade' },
+  { id: 5, texto: 'Tive dificuldade para me motivar a fazer as coisas', categoria: 'depressao' },
+  { id: 6, texto: 'Tendi a reagir de forma exagerada às situações', categoria: 'estresse' },
+  { id: 7, texto: 'Senti tremores (ex: nas mãos)', categoria: 'ansiedade' },
+  { id: 8, texto: 'Senti que estava nervoso e ansioso', categoria: 'ansiedade' },
+  { id: 9, texto: 'Preocupei-me com situações em que poderia entrar em pânico e fazer papel de bobo', categoria: 'ansiedade' },
+  { id: 10, texto: 'Senti que não tinha nada a esperar', categoria: 'depressao' },
+  { id: 11, texto: 'Senti que estava agitado', categoria: 'estresse' },
+  { id: 12, texto: 'Tive dificuldade para relaxar', categoria: 'estresse' },
+  { id: 13, texto: 'Senti deprimido e melancólico', categoria: 'depressao' },
+  { id: 14, texto: 'Eu era intolerante com qualquer coisa que me impedia de continuar o que estava fazendo', categoria: 'estresse' },
+  { id: 15, texto: 'Senti que estava à beira do pânico', categoria: 'ansiedade' },
+  { id: 16, texto: 'Não consegui me entusiasmar com nada', categoria: 'depressao' },
+  { id: 17, texto: 'Senti que não valia muito como pessoa', categoria: 'depressao' },
+  { id: 18, texto: 'Senti que era bastante temperamental', categoria: 'estresse' },
+  { id: 19, texto: 'Senti palpitações cardíacas mesmo sem esforço físico (ex: sensação de aumento da frequência cardíaca)', categoria: 'ansiedade' },
+  { id: 20, texto: 'Senti medo sem uma boa razão', categoria: 'ansiedade' },
+  { id: 21, texto: 'Senti que a vida não tinha sentido', categoria: 'depressao' }
 ]
 
 const validateForm = () => {
@@ -85,40 +68,12 @@ const validateForm = () => {
     return false;
   }
 
-  // Validar família depressão
-  if (!formData.value.familia_depressao) {
-    alert('Por favor, responda sobre depressão/ansiedade na família');
-    return false;
-  }
-
-  // Validar renda familiar
-  if (!formData.value.renda_familiar) {
-    alert('Por favor, selecione sua situação de renda familiar');
-    return false;
-  }
-
-  // Validar idade primeiro sintoma
-  if (!formData.value.idade_primeiro_sintoma) {
-    alert('Por favor, selecione a idade do primeiro sintoma');
-    return false;
-  }
-
-  // Validar divisão renda
-  if (!formData.value.divisao_renda) {
-    alert('Por favor, selecione sua divisão de renda');
-    return false;
-  }
-
-  // Validar última série ciências
-  if (!formData.value.ultima_serie_ciencias) {
-    alert('Por favor, selecione sua última série em ciências');
-    return false;
-  }
-
-  // Validar perda negócio covid
-  if (!formData.value.perda_negocio_covid) {
-    alert('Por favor, responda sobre perda de negócio/trabalho após covid');
-    return false;
+  // Validar todas as respostas do DASS-21
+  for (let i = 0; i < formData.value.data.length; i++) {
+    if (formData.value.data[i] === null || formData.value.data[i] === undefined) {
+      alert(`Por favor, responda a pergunta ${i + 1}: "${perguntasDASS21[i].texto}"`);
+      return false;
+    }
   }
 
   return true;
@@ -127,16 +82,26 @@ const validateForm = () => {
 const handleSubmit = async () => {
   if (!validateForm()) return;
 
+  // Console log das respostas dadas
+  console.log('=== RESPOSTAS DO DASS-21 ===');
+  console.log('Idade:', formData.value.idade);
+  console.log('Gênero:', formData.value.genero);
+  console.log('\n--- Respostas por pergunta ---');
+
+  formData.value.data.forEach((resposta, index) => {
+    const pergunta = perguntasDASS21[index];
+    const opcaoEscolhida = opcoesDASS21.find(opcao => opcao.value === resposta);
+    console.log(`${index + 1}. ${pergunta.texto}`);
+    console.log(`   Resposta: ${resposta} - "${opcaoEscolhida?.text || 'Não respondida'}"`);
+    console.log('');
+  });
+
   const novaResposta = {
-    MH6: formData.value.familia_depressao === 'null' ? '0' : formData.value.familia_depressao,
-    Subjective_Income: formData.value.renda_familiar === 'null' ? '0' : formData.value.renda_familiar,
-    MH7B2: formData.value.idade_primeiro_sintoma === 'null' ? '0' : formData.value.idade_primeiro_sintoma,
-    Household_Income: formData.value.divisao_renda === 'null' ? '0' : formData.value.divisao_renda,
-    W3: formData.value.ultima_serie_ciencias === 'null' ? '0' : formData.value.ultima_serie_ciencias,
-    WP21759: formData.value.perda_negocio_covid === 'null' ? '0' : formData.value.perda_negocio_covid
+    data: formData.value.data
   };
 
   // Mostrar o JSON que será enviado
+  console.log('=== DADOS ENVIADOS PARA API ===');
   console.log('Dados enviados:', JSON.stringify(novaResposta, null, 2));
 
   try {
@@ -153,10 +118,12 @@ const handleSubmit = async () => {
     };
     console.log('Armazenando no store:', respostaCompleta);
     respostasStore.adicionarResposta(respostaCompleta);
+    console.log('✅ DADOS SALVOS NO STORE!');
+    console.log('Store após salvar:', respostasStore.respostas);
     router.push('/resultados');
   } catch (error) {
     console.error('Erro ao enviar dados:', error);
-    alert('Erro ao enviar dados. Por favor, tente novamente.');
+    // Removido o alert de erro
   }
 };
 </script>
@@ -202,109 +169,29 @@ const handleSubmit = async () => {
         </div>
 
         <div class="form-section">
-          <h2>Avaliação de Contexto</h2>
+          <h2>Escala DASS-21 - Avaliação de Depressão, Ansiedade e Estresse</h2>
+          <p class="dass-instructions">
+            Por favor, leia cada afirmação e marque a opção que melhor descreve como você se sentiu na última semana.
+          </p>
 
-          <div class="form-group">
-            <label for="familia_depressao">Amigos ou família têm se sentido com depressão/ansiedade? *</label>
-            <select
-              id="familia_depressao"
-              v-model="formData.familia_depressao"
-              required
-              class="select-input"
-            >
-              <option value="">Selecione uma opção</option>
-              <option v-for="opcao in opcoesFamiliaDepressao" :key="opcao.value" :value="opcao.value">
-                {{ opcao.text }}
-              </option>
-            </select>
-          </div>
+          <div v-for="(pergunta, index) in perguntasDASS21" :key="pergunta.id" class="dass-question">
+            <div class="question-header">
+              <span class="question-number">{{ index + 1 }}.</span>
+            </div>
+            <p class="question-text">{{ pergunta.texto }}</p>
 
-          <div class="form-group">
-            <label for="renda_familiar">Qual seu sentimento sobre renda familiar? *</label>
-            <select
-              id="renda_familiar"
-              v-model="formData.renda_familiar"
-              required
-              class="select-input"
-            >
-              <option value="">Selecione uma opção</option>
-              <option v-for="opcao in opcoesRendaFamiliar" :key="opcao.value" :value="opcao.value">
-                {{ opcao.text }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="idade_primeiro_sintoma">Idade em que começou a se sentir deprimido/ansioso pela primeira vez? *</label>
-            <select
-              id="idade_primeiro_sintoma"
-              v-model="formData.idade_primeiro_sintoma"
-              required
-              class="select-input"
-            >
-              <option value="">Selecione uma opção</option>
-              <option v-for="opcao in opcoesIdadePrimeiroSintoma" :key="opcao.value" :value="opcao.value">
-                {{ opcao.text }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="divisao_renda">Em qual divisão de renda você se encontra? *</label>
-            <select
-              id="divisao_renda"
-              v-model="formData.divisao_renda"
-              required
-              class="select-input"
-            >
-              <option value="">Selecione uma opção</option>
-              <option v-for="opcao in opcoesDivisaoRenda" :key="opcao.value" :value="opcao.value">
-                {{ opcao.text }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="ultima_serie_ciencias">Qual série que você estudou ciências pela última vez? *</label>
-            <select
-              id="ultima_serie_ciencias"
-              v-model="formData.ultima_serie_ciencias"
-              required
-              class="select-input"
-            >
-              <option value="">Selecione uma opção</option>
-              <option v-for="opcao in opcoesUltimaSerieCiencias" :key="opcao.value" :value="opcao.value">
-                {{ opcao.text }}
-              </option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="perda_negocio_covid">Você perdeu seu negócio ou trabalho depois do coronavirus? *</label>
-            <select
-              id="perda_negocio_covid"
-              v-model="formData.perda_negocio_covid"
-              required
-              class="select-input"
-            >
-              <option value="">Selecione uma opção</option>
-              <option v-for="opcao in opcoesPerdaNegocioCovid" :key="opcao.value" :value="opcao.value">
-                {{ opcao.text }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-section">
-          <h2>Informações Adicionais</h2>
-          <div class="form-group">
-            <label for="comentario">Gostaria de compartilhar mais alguma informação?</label>
-            <textarea
-              id="comentario"
-              v-model="formData.comentario"
-              placeholder="Sinta-se à vontade para compartilhar mais detalhes sobre sua situação..."
-              rows="4"
-            ></textarea>
+            <div class="dass-options">
+              <label v-for="opcao in opcoesDASS21" :key="opcao.value" class="dass-option">
+                <input
+                  type="radio"
+                  :name="`dass21_${index}`"
+                  :value="opcao.value"
+                  v-model="formData.data[index]"
+                  required
+                >
+                <span class="option-text">{{ opcao.text }}</span>
+              </label>
+            </div>
           </div>
         </div>
 
@@ -497,6 +384,95 @@ textarea:focus,
   border-radius: 6px;
 }
 
+/* Estilos específicos para DASS-21 */
+.dass-instructions {
+  background-color: #e8f4fd;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+  font-size: 14px;
+  border-left: 4px solid #3498db;
+}
+
+.dass-question {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.question-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.question-number {
+  background-color: #3498db;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+
+.question-text {
+  font-size: 16px;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.dass-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 0.75rem;
+}
+
+.dass-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background-color: white;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dass-option:hover {
+  border-color: #3498db;
+  background-color: #f8f9fa;
+}
+
+.dass-option input[type="radio"] {
+  margin: 0;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.dass-option input[type="radio"]:checked + .option-text {
+  color: #3498db;
+  font-weight: 500;
+}
+
+.dass-option:has(input[type="radio"]:checked) {
+  border-color: #3498db;
+  background-color: #e8f4fd;
+}
+
+.option-text {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #2c3e50;
+}
+
 @media (max-width: 768px) {
   .form-container {
     margin: 1rem;
@@ -509,6 +485,22 @@ textarea:focus,
 
   .checkbox-group {
     grid-template-columns: 1fr;
+  }
+
+  .dass-options {
+    grid-template-columns: 1fr;
+  }
+
+  .dass-question {
+    padding: 1rem;
+  }
+
+  .question-text {
+    font-size: 15px;
+  }
+
+  .option-text {
+    font-size: 13px;
   }
 }
 </style>

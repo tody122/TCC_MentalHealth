@@ -41,11 +41,13 @@ const getMensagemPredicao = (predicao) => {
 onMounted(() => {
   // Pegar a última resposta do store
   const ultimaResposta = respostasStore.respostas[respostasStore.respostas.length - 1]
-  console.log('Última resposta do store:', ultimaResposta)
+  console.log('🔍 Última resposta do store:', ultimaResposta)
+  console.log('🔍 predicted_class:', ultimaResposta?.predicted_class)
+  console.log('🔍 confidence:', ultimaResposta?.confidence)
 
   if (ultimaResposta) {
     resultado.value = ultimaResposta
-    console.log('Resultado definido:', resultado.value)
+    console.log('✅ Resultado definido:', resultado.value)
   }
 })
 
@@ -65,18 +67,18 @@ const voltarParaInicio = () => {
         <div class="prediction-section">
           <h2>Predição</h2>
           <div class="prediction-result" :class="{
-            'positive-result': resultado.previsao === '1' || resultado.previsao === 1,
-            'negative-result': resultado.previsao === '0' || resultado.previsao === 0
+            'positive-result': resultado.predicted_class === '1' || resultado.predicted_class === 1,
+            'negative-result': resultado.predicted_class === '0' || resultado.predicted_class === 0
           }">
-            {{ getMensagemPredicao(resultado.previsao) }}
+            {{ getMensagemPredicao(resultado.predicted_class) }}
           </div>
         </div>
 
         <div class="analysis-section">
           <h2>Análise Detalhada</h2>
           <div class="analysis-content">
-            <h3 class="result-title">{{ getGrauGravidade(resultado.probabilidade_doente).titulo }}</h3>
-            <p class="result-recommendation">{{ getGrauGravidade(resultado.probabilidade_doente).recomendacao }}</p>
+            <h3 class="result-title">{{ getGrauGravidade(resultado.confidence).titulo }}</h3>
+            <p class="result-recommendation">{{ getGrauGravidade(resultado.confidence).recomendacao }}</p>
           </div>
         </div>
       </div>
