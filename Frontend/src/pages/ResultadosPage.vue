@@ -1,9 +1,98 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRespostasStore } from '../stores/respostas'
 
-const activeTab = ref('json')
+const activeTab = ref('resultado')
 const respostasStore = useRespostasStore()
+
+// Obter a última resposta (mais recente)
+const ultimaResposta = computed(() => {
+  console.log('=== VERIFICANDO STORE ===')
+  console.log('Store respostas:', respostasStore.respostas)
+  console.log('Quantidade de respostas:', respostasStore.respostas.length)
+
+  if (respostasStore.respostas.length === 0) {
+    console.log('❌ NENHUMA RESPOSTA NO STORE!')
+    return null
+  }
+
+  console.log('✅ RESPOSTAS ENCONTRADAS:', respostasStore.respostas)
+  console.log('✅ ÚLTIMA RESPOSTA:', respostasStore.respostas[respostasStore.respostas.length - 1])
+
+  return respostasStore.respostas[respostasStore.respostas.length - 1]
+})
+
+// Determinar o status de saúde mental
+const statusSaude = computed(() => {
+  if (!ultimaResposta.value) return null
+
+  console.log('🔍 MAPEANDO ESTRUTURA COMPLETA:')
+  console.log('📦 ultimaResposta.value:', ultimaResposta.value)
+  console.log('📦 Tipo:', typeof ultimaResposta.value)
+  console.log('📦 Chaves principais:', Object.keys(ultimaResposta.value))
+
+  // Verificar predicted_class no nível raiz
+  console.log('🎯 predicted_class (raiz):', ultimaResposta.value.predicted_class)
+  console.log('🎯 Tipo predicted_class:', typeof ultimaResposta.value.predicted_class)
+  console.log('🎯 predicted_class existe?', 'predicted_class' in ultimaResposta.value)
+
+  // Verificar se está em dados_enviados
+  if (ultimaResposta.value.dados_enviados) {
+    console.log('📁 dados_enviados:', ultimaResposta.value.dados_enviados)
+    console.log('📁 predicted_class em dados_enviados:', ultimaResposta.value.dados_enviados.predicted_class)
+  }
+
+  // Verificar se está em algum objeto aninhado
+  console.log('🔍 Estrutura completa (JSON):', JSON.stringify(ultimaResposta.value, null, 2))
+
+  // Verificar se há predição na resposta
+  const predicao = ultimaResposta.value.predicted_class !== undefined ? ultimaResposta.value.predicted_class :
+                   ultimaResposta.value.prediction !== undefined ? ultimaResposta.value.prediction :
+                   ultimaResposta.value.pred !== undefined ? ultimaResposta.value.pred :
+                   ultimaResposta.value.result
+  const confianca = ultimaResposta.value.confidence || ultimaResposta.value.confidence_score || 0
+
+  // Verificar se está dentro de dados_enviados
+  console.log('DEBUG - dados_enviados:', ultimaResposta.value.dados_enviados)
+  if (ultimaResposta.value.dados_enviados) {
+    console.log('DEBUG - predicted_class em dados_enviados:', ultimaResposta.value.dados_enviados.predicted_class)
+  }
+
+  console.log('DEBUG - predicao final:', predicao)
+  console.log('DEBUG - tipo predicao:', typeof predicao)
+  console.log('DEBUG - predicao === 0:', predicao === 0)
+  console.log('DEBUG - predicao === "0":', predicao === "0")
+  console.log('DEBUG - Valor da predição recebido:', predicao, 'Tipo:', typeof predicao)
+
+  if (predicao === 0 || predicao === '0') {
+    return {
+      status: 'saudavel',
+      titulo: 'Você está saudável!',
+      mensagem: 'Parabéns! Com base na sua avaliação, você não apresenta sinais significativos de problemas de saúde mental.',
+      cor: '#27ae60',
+      icone: '✅',
+      confianca: confianca
+    }
+  } else if (predicao === 1 || predicao === '1') {
+    return {
+      status: 'atencao',
+      titulo: 'Atenção necessária',
+      mensagem: 'Sua avaliação indica que pode ser benéfico buscar apoio profissional para sua saúde mental.',
+      cor: '#e74c3c',
+      icone: '⚠️',
+      confianca: confianca
+    }
+  } else {
+    return {
+      status: 'indefinido',
+      titulo: 'Resultado não disponível',
+      mensagem: 'Não foi possível processar o resultado da sua avaliação.',
+      cor: '#95a5a6',
+      icone: '❓',
+      confianca: 0
+    }
+  }
+})
 </script>
 
 <template>
@@ -13,21 +102,73 @@ const respostasStore = useRespostasStore()
 
       <div class="tabs">
         <button
+          :class="['tab-button', { active: activeTab === 'resultado' }]"
+          @click="activeTab = 'resultado'"
+        >
+          Resultado da Avaliação
+        </button>
+        <button
           :class="['tab-button', { active: activeTab === 'json' }]"
           @click="activeTab = 'json'"
         >
-          Dados JSON (Provisório)
+          Dados Técnicos
         </button>
       </div>
 
+      <!-- Resultado Principal -->
+      <div v-if="activeTab === 'resultado'" class="resultado-container">
+        <div v-if="!ultimaResposta" class="no-data">
+          <h2>Nenhuma avaliação encontrada</h2>
+          <p>Complete a avaliação DASS-21 para ver seus resultados.</p>
+        </div>
+
+        <div v-else class="resultado-content">
+          <div class="resultado-card" :style="{ borderColor: statusSaude?.cor }">
+            <div class="resultado-header">
+              <span class="resultado-icone">{{ statusSaude?.icone }}</span>
+              <h2 :style="{ color: statusSaude?.cor }">{{ statusSaude?.titulo }}</h2>
+            </div>
+
+            <div class="resultado-mensagem">
+              <p>{{ statusSaude?.mensagem }}</p>
+              <div v-if="statusSaude?.confianca > 0" class="confianca-info">
+                <p><strong>Confiança da análise:</strong> {{ Math.round(statusSaude.confianca * 100) }}%</p>
+              </div>
+            </div>
+
+            <div v-if="statusSaude?.status === 'atencao'" class="recomendacoes">
+              <h3>Recomendações:</h3>
+              <ul>
+                <li>Consulte um profissional de saúde mental</li>
+                <li>Procure apoio de familiares e amigos</li>
+                <li>Mantenha uma rotina saudável</li>
+                <li>Pratique atividades que te fazem bem</li>
+              </ul>
+            </div>
+
+            <div v-if="statusSaude?.status === 'saudavel'" class="recomendacoes">
+              <h3>Continue assim:</h3>
+              <ul>
+                <li>Mantenha hábitos saudáveis</li>
+                <li>Pratique exercícios regularmente</li>
+                <li>Mantenha conexões sociais</li>
+                <li>Busque ajuda se precisar no futuro</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dados JSON Técnicos -->
       <div v-if="activeTab === 'json'" class="data-container">
-        <h2>Dados Coletados em JSON</h2>
+        <h2>Dados Técnicos da Avaliação</h2>
         <div class="data-content">
           <div v-if="respostasStore.respostas.length === 0" class="no-data">
             Nenhuma resposta registrada ainda.
           </div>
           <div v-else class="data-list">
-            <div v-for="resposta in respostasStore.respostas" :key="resposta.id" class="data-item">
+            <div v-for="(resposta, index) in respostasStore.respostas" :key="index" class="data-item">
+              <h3>Avaliação {{ index + 1 }}</h3>
               <pre>{{ JSON.stringify(resposta, null, 2) }}</pre>
             </div>
           </div>
@@ -130,5 +271,143 @@ const respostasStore = useRespostasStore()
   font-family: 'Courier New', Courier, monospace;
   font-size: 14px;
   color: #2c3e50;
+}
+
+/* Estilos para resultado principal */
+.resultado-container {
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.resultado-content {
+  display: flex;
+  justify-content: center;
+}
+
+.resultado-card {
+  max-width: 600px;
+  width: 100%;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 3px solid;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.resultado-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.resultado-icone {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.resultado-card h2 {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.resultado-mensagem {
+  margin-bottom: 2rem;
+}
+
+.resultado-mensagem p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.confianca-info {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(52, 152, 219, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+}
+
+.confianca-info p {
+  margin: 0;
+  font-size: 16px;
+  color: #2c3e50;
+}
+
+.recomendacoes {
+  background-color: rgba(52, 152, 219, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.recomendacoes h3 {
+  color: #2c3e50;
+  font-size: 20px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.recomendacoes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recomendacoes li {
+  padding: 0.5rem 0;
+  position: relative;
+  padding-left: 1.5rem;
+  color: #2c3e50;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.recomendacoes li::before {
+  content: "•";
+  color: #3498db;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.no-data {
+  text-align: center;
+  color: #666;
+  padding: 3rem;
+}
+
+.no-data h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.no-data p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .resultados-page {
+    padding: 1rem;
+  }
+
+  .resultado-card {
+    padding: 1.5rem;
+  }
+
+  .resultado-card h2 {
+    font-size: 24px;
+  }
+
+  .resultado-mensagem p {
+    font-size: 16px;
+  }
 }
 </style>

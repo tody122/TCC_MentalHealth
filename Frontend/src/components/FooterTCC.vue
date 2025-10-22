@@ -5,7 +5,7 @@
       Desenvolvido por Pedro Henrique Todineyb Santos, Rafael Ramos do Rosário, Kauan da Silva<br>
       Facens — Faculdade de Engenharia de Sorocaba<br>
       Engenharia da Computação<br>
-      Orientador: Prof. Rodrigo Abegão<br>
+      Orientador: Prof. Allan Marconato Marum<br>
       <span class="footer-disclaimer">
         Este sistema não substitui avaliação profissional. Procure um especialista em caso de necessidade.
       </span>
