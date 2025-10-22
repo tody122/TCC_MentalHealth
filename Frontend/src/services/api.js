@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-// Usar sempre /api (proxy do Vite em dev, proxy do Vercel em prod)
-const API_URL = '/api';
+// Detectar ambiente e usar URL apropriada
+const isDevelopment = import.meta.env.DEV;
+const API_URL = isDevelopment ? '/api' : '/api';
 
-console.log('🌍 Usando proxy:', API_URL);
+console.log('🌍 Ambiente:', isDevelopment ? 'Desenvolvimento' : 'Produção');
+console.log('🔗 API URL:', API_URL);
 
 const api = axios.create({
     baseURL: API_URL,
