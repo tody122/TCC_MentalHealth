@@ -218,6 +218,21 @@ const handleSubmit = async () => {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+@media (max-width: 768px) {
+  .form-container {
+    margin: 1rem 0.5rem;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-container {
+    margin: 0.5rem;
+    padding: 0.75rem;
+    border-radius: 12px;
+  }
+}
+
 .form-header {
   text-align: center;
   margin-bottom: 3rem;
@@ -237,10 +252,28 @@ const handleSubmit = async () => {
   font-weight: 600;
 }
 
+@media (max-width: 768px) {
+  .form-header h1 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-header h1 {
+    font-size: 20px;
+  }
+}
+
 .subtitle {
   color: #666;
   font-size: 16px;
   line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .subtitle {
+    font-size: 14px;
+  }
 }
 
 .form-section {
@@ -403,6 +436,20 @@ textarea:focus,
   border: 1px solid #e9ecef;
 }
 
+@media (max-width: 768px) {
+  .dass-question {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dass-question {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+  }
+}
+
 .question-header {
   display: flex;
   align-items: center;
@@ -428,10 +475,24 @@ textarea:focus,
   font-weight: 500;
 }
 
+@media (max-width: 480px) {
+  .question-text {
+    font-size: 14px;
+    margin-bottom: 0.75rem;
+  }
+}
+
 .dass-options {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .dass-options {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
 }
 
 .dass-option {
@@ -473,12 +534,14 @@ textarea:focus,
   color: #2c3e50;
 }
 
-@media (max-width: 768px) {
-  .form-container {
-    margin: 1rem;
-    padding: 1rem;
+@media (max-width: 480px) {
+  .option-text {
+    font-size: 13px;
+    line-height: 1.3;
   }
+}
 
+@media (max-width: 768px) {
   .form-row {
     grid-template-columns: 1fr;
   }
@@ -487,20 +550,40 @@ textarea:focus,
     grid-template-columns: 1fr;
   }
 
-  .dass-options {
-    grid-template-columns: 1fr;
-  }
-
-  .dass-question {
+  .form-section {
     padding: 1rem;
   }
 
-  .question-text {
-    font-size: 15px;
+  .form-section h2 {
+    font-size: 18px;
   }
 
-  .option-text {
+  .dass-instructions {
     font-size: 13px;
+    padding: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+  }
+
+  .form-section {
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-section h2 {
+    font-size: 16px;
+    margin-bottom: 1rem;
+  }
+
+  .dass-instructions {
+    font-size: 12px;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
   }
 }
 </style>

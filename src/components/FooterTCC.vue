@@ -43,10 +43,32 @@
   font-size: 0.98rem;
   margin: 1rem 0 0.5rem 0;
 }
+@media (max-width: 768px) {
+  .footer-tcc {
+    padding: 1.5rem 0.75rem 1rem 0.75rem;
+    font-size: 0.95rem;
+  }
+}
+
 @media (max-width: 600px) {
   .footer-content {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     padding: 0 0.5rem;
+  }
+
+  .footer-tcc {
+    padding: 1.5rem 0.5rem 1rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-content {
+    font-size: 0.85rem;
+    padding: 0 0.25rem;
+  }
+
+  .footer-disclaimer {
+    font-size: 0.9rem;
   }
 }
 </style>

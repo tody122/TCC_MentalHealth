@@ -27,4 +27,21 @@ import ScrollToTop from './components/ScrollToTop.vue'
   margin-top: 80px; /* Espaço para a navbar fixa */
   min-height: calc(100vh - 160px); /* Altura mínima considerando navbar e footer */
 }
+
+@media (max-width: 768px) {
+  .app-container {
+    padding: 0.5rem;
+  }
+
+  .main-content {
+    margin-top: 70px;
+    min-height: calc(100vh - 140px);
+  }
+}
+
+@media (max-width: 480px) {
+  .app-container {
+    padding: 0.25rem;
+  }
+}
 </style>

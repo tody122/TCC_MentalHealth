@@ -221,6 +221,21 @@ const navigateToForm = () => {
   padding: 2rem 1rem;
 }
 
+@media (max-width: 768px) {
+  .home-hero {
+    min-height: auto;
+    padding: 1.5rem 1rem;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-hero {
+    padding: 1rem 0.75rem;
+    gap: 1rem;
+  }
+}
+
 .home-text {
   flex: 1;
   max-width: 520px;
@@ -234,11 +249,37 @@ const navigateToForm = () => {
   line-height: 1.2;
 }
 
+@media (max-width: 768px) {
+  .home-text h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-text h1 {
+    font-size: 1.25rem;
+  }
+}
+
 .intro-text {
   color: #2c3e50;
   font-size: 1.08rem;
   margin-bottom: 2.5rem;
   line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .intro-text {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .intro-text {
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+  }
 }
 
 .cta-button, .cta-button-large {
@@ -279,6 +320,22 @@ const navigateToForm = () => {
   box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
+@media (max-width: 768px) {
+  .cta-button-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-button-large {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    width: 90%;
+    max-width: 300px;
+  }
+}
+
 .cta-button-large:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 20px rgba(0,0,0,0.3);
@@ -298,13 +355,23 @@ const navigateToForm = () => {
   border-radius: 0;
   margin: 3rem 0 0 0;
   padding: 4rem 2vw 4rem 2vw;
-  width: 100vw;
+  width: 100%;
   box-shadow: 0 2px 12px rgba(52,152,219,0.07);
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .objectives-section {
+    margin: 2rem 0 0 0;
+    padding: 2rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .objectives-section {
+    margin: 1.5rem 0 0 0;
+    padding: 1.5rem 0.75rem;
+  }
 }
 
 .objectives-title {
@@ -314,6 +381,21 @@ const navigateToForm = () => {
   color: #1a3a4a;
   margin-bottom: 2.5rem;
   position: relative;
+}
+
+@media (max-width: 768px) {
+  .objectives-title {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .objectives-title {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
 }
 
 .objectives-title::before {
@@ -330,6 +412,20 @@ const navigateToForm = () => {
   flex-wrap: wrap;
 }
 
+@media (max-width: 768px) {
+  .objectives-cards {
+    gap: 1.5rem;
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .objectives-cards {
+    gap: 1rem;
+    padding: 0;
+  }
+}
+
 .objective-card {
   background: #f5f8fa;
   border: 2px solid #3498db;
@@ -344,6 +440,14 @@ const navigateToForm = () => {
   align-items: center;
   text-align: center;
   transition: transform 0.3s cubic-bezier(.23,1.02,.32,1), box-shadow 0.3s cubic-bezier(.23,1.02,.32,1);
+}
+
+@media (max-width: 480px) {
+  .objective-card {
+    min-width: 100%;
+    max-width: 100%;
+    padding: 1rem;
+  }
 }
 
 .objective-card:hover {
@@ -380,6 +484,20 @@ const navigateToForm = () => {
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .depoimentos-section {
+    padding: 2rem 0.75rem;
+    margin: 2rem 0.5rem 0 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .depoimentos-section {
+    padding: 1.5rem 0.5rem;
+    margin: 1.5rem 0.25rem 0 0.25rem;
+  }
 }
 
 .depoimentos-title {
@@ -429,6 +547,20 @@ const navigateToForm = () => {
   margin-right: auto;
 }
 
+@media (max-width: 768px) {
+  .info-section {
+    padding: 2rem 1rem;
+    margin: 2rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-section {
+    padding: 1.5rem 0.75rem;
+    margin: 1.5rem 0;
+  }
+}
+
 .info-title {
   text-align: center;
   font-size: 1.5rem;
@@ -461,6 +593,14 @@ const navigateToForm = () => {
   min-width: 300px;
   max-width: 500px;
   box-shadow: 0 4px 16px rgba(52,152,219,0.10);
+}
+
+@media (max-width: 480px) {
+  .info-card {
+    min-width: 100%;
+    max-width: 100%;
+    padding: 1.5rem;
+  }
 }
 
 .info-card h3 {
@@ -508,6 +648,20 @@ const navigateToForm = () => {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .como-funciona-section {
+    padding: 2rem 1rem;
+    margin: 2rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .como-funciona-section {
+    padding: 1.5rem 0.75rem;
+    margin: 1.5rem 0;
+  }
 }
 
 .como-funciona-intro {
@@ -682,6 +836,25 @@ const navigateToForm = () => {
   font-size: 1.08rem;
 }
 
+@media (max-width: 768px) {
+  .anonimato-section {
+    padding: 1rem 1.5rem;
+    margin: 2rem 0.5rem;
+    font-size: 1rem;
+    flex-wrap: wrap;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .anonimato-section {
+    padding: 0.875rem 1rem;
+    margin: 1.5rem 0.25rem;
+    font-size: 0.9rem;
+    gap: 0.75rem;
+  }
+}
+
 .anonimato-icon {
   font-size: 2rem;
   color: #217dbb;
@@ -698,14 +871,24 @@ const navigateToForm = () => {
   margin: 4rem 0 0 0;
   padding: 4rem 2rem;
   border-radius: 0;
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  width: 100%;
   color: white;
   text-align: center;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .cta-section {
+    margin: 3rem 0 0 0;
+    padding: 3rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-section {
+    margin: 2rem 0 0 0;
+    padding: 2rem 0.75rem;
+  }
 }
 
 .cta-content {
@@ -720,11 +903,40 @@ const navigateToForm = () => {
   color: white;
 }
 
+@media (max-width: 768px) {
+  .cta-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-title {
+    font-size: 1.25rem;
+    padding: 0 0.5rem;
+  }
+}
+
 .cta-text {
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 2.5rem;
   opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .cta-text {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-text {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
 }
 
 .cta-features {
@@ -733,6 +945,22 @@ const navigateToForm = () => {
   gap: 3rem;
   margin-bottom: 2.5rem;
   flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .cta-features {
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-features {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .cta-feature {
@@ -759,6 +987,10 @@ const navigateToForm = () => {
   .home-image {
     min-width: 0;
   }
+  .home-image svg {
+    width: 120px;
+    height: 120px;
+  }
   .home-text {
     max-width: 100%;
   }
@@ -766,6 +998,13 @@ const navigateToForm = () => {
     flex-direction: column;
     gap: 1.5rem;
     align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-image svg {
+    width: 100px;
+    height: 100px;
   }
 }
 
