@@ -44,26 +44,26 @@ const opcoesDASS21 = [
 // Perguntas do DASS-21
 const perguntasDASS21 = [
   // Depressão (1, 3, 4, 7, 8, 9, 10)
-  { id: 1, texto: 'Senti dificuldade para relaxar', categoria: 'depressao' },
-  { id: 2, texto: 'Tive boca seca', categoria: 'ansiedade' },
-  { id: 3, texto: 'Não consegui sentir nenhum sentimento positivo', categoria: 'depressao' },
-  { id: 4, texto: 'Tive dificuldade para respirar (ex: respiração ofegante, falta de ar na ausência de esforço físico)', categoria: 'ansiedade' },
-  { id: 5, texto: 'Tive dificuldade para me motivar a fazer as coisas', categoria: 'depressao' },
-  { id: 6, texto: 'Tendi a reagir de forma exagerada às situações', categoria: 'estresse' },
-  { id: 7, texto: 'Senti tremores (ex: nas mãos)', categoria: 'ansiedade' },
-  { id: 8, texto: 'Senti que estava nervoso e ansioso', categoria: 'ansiedade' },
-  { id: 9, texto: 'Preocupei-me com situações em que poderia entrar em pânico e fazer papel de bobo', categoria: 'ansiedade' },
-  { id: 10, texto: 'Senti que não tinha nada a esperar', categoria: 'depressao' },
-  { id: 11, texto: 'Senti que estava agitado', categoria: 'estresse' },
-  { id: 12, texto: 'Tive dificuldade para relaxar', categoria: 'estresse' },
-  { id: 13, texto: 'Senti deprimido e melancólico', categoria: 'depressao' },
-  { id: 14, texto: 'Eu era intolerante com qualquer coisa que me impedia de continuar o que estava fazendo', categoria: 'estresse' },
-  { id: 15, texto: 'Senti que estava à beira do pânico', categoria: 'ansiedade' },
+  { id: 1, texto: 'Achei difícil me acalmar', categoria: 'depressao' },
+  { id: 2, texto: 'Senti minha boca seca', categoria: 'ansiedade' },
+  { id: 3, texto: 'Não consegui vivenciar nenhum sentimento positivo', categoria: 'depressao' },
+  { id: 4, texto: 'Tive dificuldade em respirar em alguns momentos (ex. respiração ofegante, falta de ar, sem ter feito nenhum esforço físico)', categoria: 'ansiedade' },
+  { id: 5, texto: 'Achei difícil ter iniciativa para fazer as coisas', categoria: 'depressao' },
+  { id: 6, texto: 'Tive a tendência de reagir de forma exagerada às situações', categoria: 'estresse' },
+  { id: 7, texto: 'Senti tremores (ex. nas mãos)', categoria: 'ansiedade' },
+  { id: 8, texto: 'Senti que estava sempre nervoso', categoria: 'ansiedade' },
+  { id: 9, texto: 'Preocupei-me com situações em que eu pudesse entrar em pânico e parecesse ridículo (a)', categoria: 'ansiedade' },
+  { id: 10, texto: 'Senti que não tinha nada a desejar', categoria: 'depressao' },
+  { id: 11, texto: 'Senti-me agitado', categoria: 'estresse' },
+  { id: 12, texto: 'Achei difícil relaxar', categoria: 'estresse' },
+  { id: 13, texto: 'Senti-me depressivo (a) e sem ânimo', categoria: 'depressao' },
+  { id: 14, texto: 'Fui intolerante com as coisas que me impediam de continuar o que eu estava fazendo', categoria: 'estresse' },
+  { id: 15, texto: 'Senti que ia entrar em pânico', categoria: 'ansiedade' },
   { id: 16, texto: 'Não consegui me entusiasmar com nada', categoria: 'depressao' },
-  { id: 17, texto: 'Senti que não valia muito como pessoa', categoria: 'depressao' },
-  { id: 18, texto: 'Senti que era bastante temperamental', categoria: 'estresse' },
-  { id: 19, texto: 'Senti palpitações cardíacas mesmo sem esforço físico (ex: sensação de aumento da frequência cardíaca)', categoria: 'ansiedade' },
-  { id: 20, texto: 'Senti medo sem uma boa razão', categoria: 'ansiedade' },
+  { id: 17, texto: 'Senti que não tinha valor como pessoa', categoria: 'depressao' },
+  { id: 18, texto: 'Senti que estava um pouco emotivo/sensível demais', categoria: 'estresse' },
+  { id: 19, texto: 'Sabia que meu coração estava alterado mesmo não tendo feito nenhum esforço físico (ex. aumento da frequência cardíaca, disritmia cardíaca)', categoria: 'ansiedade' },
+  { id: 20, texto: 'Senti medo sem motivo', categoria: 'ansiedade' },
   { id: 21, texto: 'Senti que a vida não tinha sentido', categoria: 'depressao' }
 ]
 
@@ -154,7 +154,7 @@ const handleSubmit = async () => {
           <strong>Este questionário não deve ser usado como palavra final de um médico.</strong>
         </p>
         <p class="warning-text">
-          Esta ferramenta é apenas para <strong>fins de estudo e pesquisa</strong>. 
+          Esta ferramenta é apenas para <strong>fins de estudo e pesquisa</strong>.
           Os resultados obtidos aqui são informativos e não substituem uma avaliação profissional.
         </p>
         <p class="warning-text">
