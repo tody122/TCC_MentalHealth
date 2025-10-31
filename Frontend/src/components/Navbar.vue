@@ -57,6 +57,18 @@ const navigateTo = (path) => {
   align-items: center;
 }
 
+@media (max-width: 768px) {
+  .navbar-container {
+    padding: 0.875rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-container {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
 .navbar-logo {
   cursor: pointer;
 }
@@ -65,6 +77,12 @@ const navigateTo = (path) => {
   margin: 0;
   font-size: 1.5rem;
   color: #333;
+}
+
+@media (max-width: 480px) {
+  .navbar-logo h1 {
+    font-size: 1.25rem;
+  }
 }
 
 .navbar-menu {

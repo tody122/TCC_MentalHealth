@@ -184,6 +184,18 @@ const statusSaude = computed(() => {
   padding: 2rem;
 }
 
+@media (max-width: 768px) {
+  .resultados-page {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .resultados-page {
+    padding: 0.5rem;
+  }
+}
+
 .resultados-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -196,12 +208,41 @@ const statusSaude = computed(() => {
   text-align: center;
 }
 
+@media (max-width: 768px) {
+  .resultados-container h1 {
+    font-size: 24px;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .resultados-container h1 {
+    font-size: 20px;
+    margin-bottom: 1rem;
+  }
+}
+
 .tabs {
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
   border-bottom: 1px solid #e0e0e0;
   padding-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .tabs {
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tabs {
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
 }
 
 .tab-button {
@@ -214,6 +255,22 @@ const statusSaude = computed(() => {
   cursor: pointer;
   border-radius: 8px;
   transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .tab-button {
+    padding: 0.625rem 1rem;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tab-button {
+    padding: 0.5rem 0.75rem;
+    font-size: 13px;
+    flex: 1;
+    min-width: 120px;
+  }
 }
 
 .tab-button:hover {
@@ -230,6 +287,19 @@ const statusSaude = computed(() => {
   border-radius: 16px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .data-container {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .data-container {
+    padding: 1rem;
+    border-radius: 12px;
+  }
 }
 
 .data-container h2 {
@@ -271,6 +341,13 @@ const statusSaude = computed(() => {
   font-family: 'Courier New', Courier, monospace;
   font-size: 14px;
   color: #2c3e50;
+  overflow-x: auto;
+}
+
+@media (max-width: 480px) {
+  .data-item pre {
+    font-size: 11px;
+  }
 }
 
 /* Estilos para resultado principal */
@@ -297,6 +374,21 @@ const statusSaude = computed(() => {
   text-align: center;
 }
 
+@media (max-width: 768px) {
+  .resultado-card {
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .resultado-card {
+    padding: 1rem;
+    border-radius: 12px;
+    border-width: 2px;
+  }
+}
+
 .resultado-header {
   display: flex;
   flex-direction: column;
@@ -315,6 +407,18 @@ const statusSaude = computed(() => {
   margin: 0;
 }
 
+@media (max-width: 768px) {
+  .resultado-card h2 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .resultado-card h2 {
+    font-size: 20px;
+  }
+}
+
 .resultado-mensagem {
   margin-bottom: 2rem;
 }
@@ -324,6 +428,19 @@ const statusSaude = computed(() => {
   line-height: 1.6;
   color: #2c3e50;
   margin: 0;
+}
+
+@media (max-width: 768px) {
+  .resultado-mensagem p {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .resultado-mensagem p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
 }
 
 .confianca-info {
@@ -394,20 +511,58 @@ const statusSaude = computed(() => {
 }
 
 @media (max-width: 768px) {
-  .resultados-page {
+  .resultado-icone {
+    font-size: 2.5rem;
+  }
+
+  .recomendacoes {
     padding: 1rem;
   }
 
-  .resultado-card {
-    padding: 1.5rem;
+  .recomendacoes h3 {
+    font-size: 18px;
   }
 
-  .resultado-card h2 {
-    font-size: 24px;
+  .recomendacoes li {
+    font-size: 14px;
   }
 
-  .resultado-mensagem p {
+  .confianca-info {
+    padding: 0.875rem;
+  }
+
+  .confianca-info p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .resultado-icone {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .recomendacoes {
+    padding: 0.75rem;
+  }
+
+  .recomendacoes h3 {
     font-size: 16px;
+    margin-bottom: 0.75rem;
+  }
+
+  .recomendacoes li {
+    font-size: 13px;
+    padding: 0.375rem 0;
+    padding-left: 1.25rem;
+  }
+
+  .confianca-info {
+    padding: 0.75rem;
+  }
+
+  .confianca-info p {
+    font-size: 13px;
   }
 }
 </style>
