@@ -178,7 +178,7 @@ const handleSubmit = async () => {
       </div>
 
       <form @submit.prevent="handleSubmit" class="form-content">
-        <div class="form-section">
+        <!-- <div class="form-section">
           <h2>Informações Básicas</h2>
           <div class="form-row">
             <div class="form-group">
@@ -204,7 +204,7 @@ const handleSubmit = async () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="form-section">
           <h2>Escala DASS-21 - Avaliação de Depressão, Ansiedade e Estresse</h2>
