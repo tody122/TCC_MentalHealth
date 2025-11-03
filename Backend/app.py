@@ -17,7 +17,7 @@ model = Model() # Instancia a arquitetura
 
 # Carrega os pesos (state_dict) que você treinou
 # IMPORTANTE: map_location="cpu" força o modelo a rodar em CPU no Render
-model.load_state_dict(torch.load("ModeloPytorch.pt", map_location=torch.device('cpu')))
+model.load_state_dict(torch.load("ModeloPytorchBalanceado.pt", map_location=torch.device('cpu')))
 
 # IMPORTANTE: Coloca o modelo em modo de avaliação (desliga dropout, etc.)
 model.eval() 
