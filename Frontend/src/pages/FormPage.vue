@@ -21,8 +21,6 @@ const closeWarningModal = () => {
 
 // Dados do formulário DASS-21
 const formData = ref({
-  idade: '',
-  genero: '',
   data: Array(21).fill(null)
 })
 
@@ -68,17 +66,6 @@ const perguntasDASS21 = [
 ]
 
 const validateForm = () => {
-  // Validar idade
-  if (!formData.value.idade || formData.value.idade < 0 || formData.value.idade > 120) {
-    alert('Por favor, insira uma idade válida (entre 0 e 120 anos)');
-    return false;
-  }
-
-  // Validar gênero
-  if (!formData.value.genero) {
-    alert('Por favor, selecione seu gênero');
-    return false;
-  }
 
   // Validar todas as respostas do DASS-21
   for (let i = 0; i < formData.value.data.length; i++) {
@@ -149,7 +136,6 @@ const handleSubmit = async () => {
         <button class="modal-close" @click="closeWarningModal" aria-label="Fechar">×</button>
       </div>
       <div class="modal-body">
-        <div class="warning-icon">🏥</div>
         <p class="warning-text">
           <strong>Este questionário não deve ser usado como palavra final de um médico.</strong>
         </p>
@@ -178,33 +164,6 @@ const handleSubmit = async () => {
       </div>
 
       <form @submit.prevent="handleSubmit" class="form-content">
-        <!-- <div class="form-section">
-          <h2>Informações Básicas</h2>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="idade">Idade *</label>
-              <input
-                type="number"
-                id="idade"
-                v-model="formData.idade"
-                required
-                min="0"
-                max="120"
-                placeholder="Sua idade"
-              >
-            </div>
-
-            <div class="form-group">
-              <label>Gênero *</label>
-              <div class="radio-group">
-                <label v-for="opcao in opcoesGenero" :key="opcao.value">
-                  <input type="radio" v-model="formData.genero" :value="opcao.value" required>
-                  {{ opcao.text }}
-                </label>
-              </div>
-            </div>
-          </div>
-        </div> -->
 
         <div class="form-section">
           <h2>Escala DASS-21 - Avaliação de Depressão, Ansiedade e Estresse</h2>
