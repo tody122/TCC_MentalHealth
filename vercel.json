@@ -11,8 +11,16 @@
   ],
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "/Frontend/dist/$1"
+      "src": "/",
+      "dest": "/"
+    },
+    {
+      "src": "/formulario",
+      "dest": "/formulario"
+    },
+    {
+      "src": "/resultados",
+      "dest": "/resultados"
     }
   ]
 } 
