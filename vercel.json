@@ -11,16 +11,15 @@
   ],
   "routes": [
     {
-      "src": "/",
-      "dest": "/"
+      "src": "/api/(.*)",
+      "dest": "https://tcc-mentalhealth.onrender.com/api/$1"
     },
     {
-      "src": "/formulario",
-      "dest": "/"
+      "handle": "filesystem"
     },
     {
-      "src": "/resultados",
-      "dest": "/"
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 } 
