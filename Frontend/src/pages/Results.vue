@@ -45,9 +45,9 @@ const getRecomendacaoPersonalizada = (predicted_class, confidence) => {
   // Caso 1: Predição positiva (tem sintomas)
   if (predicao === 1) {
     if (confianca >= 0.8) {
-      return "Com base na análise dos seus padrões de resposta, há indicações significativas que sugerem a presença de sintomas relacionados a ansiedade ou depressão. Recomendamos fortemente que busque avaliação com um profissional de saúde mental o quanto antes. O apoio profissional pode ajudá-lo a compreender melhor sua situação e desenvolver estratégias adequadas de cuidado."
+      return "Com base na análise dos seus padrões de resposta, há indicações significativas que sugerem a presença de sintomas relacionados a ansiedade, depressão ou estresse. Recomendamos fortemente que busque avaliação com um profissional de saúde mental o quanto antes. O apoio profissional pode ajudá-lo a compreender melhor sua situação e desenvolver estratégias adequadas de cuidado."
     } else if (confianca >= 0.6) {
-      return "Os resultados indicam a possibilidade de sintomas relacionados a ansiedade ou depressão. Embora a análise não seja definitiva, é importante considerar buscar orientação profissional para uma avaliação mais completa. A atenção precoce pode fazer uma grande diferença no seu bem-estar."
+      return "Os resultados indicam a possibilidade de sintomas relacionados a ansiedade, depressão ou estresse. Embora a análise não seja definitiva, é importante considerar buscar orientação profissional para uma avaliação mais completa. A atenção precoce pode fazer uma grande diferença no seu bem-estar."
     } else if (confianca >= 0.4) {
       return "Há alguns indícios que podem sugerir a presença de sintomas leves. Embora não seja conclusivo, estar atento ao seu bem-estar emocional é importante. Considere praticar atividades que promovam seu equilíbrio mental e, se os sintomas persistirem ou piorarem, busque apoio profissional."
     } else {
@@ -58,9 +58,9 @@ const getRecomendacaoPersonalizada = (predicted_class, confidence) => {
   // Caso 2: Predição negativa (não tem sintomas)
   if (predicao === 0) {
     if (confianca >= 0.8) {
-      return "Os resultados indicam que você apresenta um padrão de respostas que não sugere sintomas significativos de ansiedade ou depressão no momento. Continue mantendo hábitos saudáveis e prestando atenção ao seu bem-estar emocional. Lembre-se de que buscar ajuda profissional sempre é uma opção válida, mesmo quando tudo parece estar bem."
+      return "Os resultados indicam que você apresenta um padrão de respostas que não sugere sintomas significativos de ansiedade, depressão ou estresse no momento. Continue mantendo hábitos saudáveis e prestando atenção ao seu bem-estar emocional. Lembre-se de que buscar ajuda profissional sempre é uma opção válida, mesmo quando tudo parece estar bem."
     } else if (confianca >= 0.6) {
-      return "Com base na análise, não há indicações claras de sintomas relacionados a ansiedade ou depressão. Isso é positivo! Continue investindo em sua saúde mental através de práticas como exercícios, alimentação equilibrada e manutenção de relacionamentos saudáveis."
+      return "Com base na análise, não há indicações claras de sintomas relacionados a ansiedade, depressão ou estresse. Isso é positivo! Continue investindo em sua saúde mental através de práticas como exercícios, alimentação equilibrada e manutenção de relacionamentos saudáveis."
     } else {
       return "Os resultados sugerem que você está em um bom estado de bem-estar mental. Continue cuidando de si mesmo e mantenha uma rotina equilibrada. Se surgirem preocupações no futuro, não hesite em buscar apoio profissional quando necessário."
     }

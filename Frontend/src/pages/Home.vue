@@ -96,14 +96,13 @@ const navigateToForm = () => {
         </ul>
       </div>
       <div class="info-card">
-        <h3>O que é Ansiedade?</h3>
-        <p>A ansiedade é uma resposta natural do corpo ao estresse, mas quando excessiva, pode se tornar um transtorno. Caracteriza-se por preocupação e medo intensos, excessivos e persistentes sobre situações cotidianas.</p>
+        <h3>O que é Estresse?</h3>
+        <p>O estresse é uma resposta natural do corpo ao estresse, mas quando excessiva, pode se tornar um transtorno. Caracteriza-se por preocupação e medo intensos, excessivos e persistentes sobre situações cotidianas.</p>
         <ul class="info-list">
-          <li>Preocupação excessiva</li>
-          <li>Inquietação e tensão</li>
-          <li>Dificuldade de relaxar</li>
-          <li>Problemas de concentração</li>
-          <li>Sintomas físicos (taquicardia, sudorese)</li>
+          <li>Ansiedade</li>
+          <li>Falta de sono</li>
+          <li>Dificuldade de concentração</li>
+          <li>Sintomas físicos (dores de cabeça, fadiga, problemas digestivos)</li>
         </ul>
       </div>
     </div>
