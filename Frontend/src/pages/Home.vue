@@ -95,6 +95,17 @@ const navigateToForm = () => {
           <li>Sintomas físicos (taquicardia, sudorese)</li>
         </ul>
       </div>
+      <div class="info-card">
+        <h3>O que é Ansiedade?</h3>
+        <p>A ansiedade é uma resposta natural do corpo ao estresse, mas quando excessiva, pode se tornar um transtorno. Caracteriza-se por preocupação e medo intensos, excessivos e persistentes sobre situações cotidianas.</p>
+        <ul class="info-list">
+          <li>Preocupação excessiva</li>
+          <li>Inquietação e tensão</li>
+          <li>Dificuldade de relaxar</li>
+          <li>Problemas de concentração</li>
+          <li>Sintomas físicos (taquicardia, sudorese)</li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -113,14 +124,14 @@ const navigateToForm = () => {
     <h2 class="como-funciona-title">Como funciona nossa IA?</h2>
     <div class="como-funciona-content">
       <p class="como-funciona-intro">
-        Desenvolvida como parte de um projeto de pesquisa acadêmica, nossa Inteligência Artificial foi treinada para analisar padrões comportamentais e identificar possíveis indicadores de saúde mental. O sistema utiliza algoritmos avançados de machine learning para processar suas respostas e fornecer insights personalizados.
+        Desenvolvida como parte de um projeto de pesquisa acadêmica, nossa Inteligência Artificial foi treinada para analisar padrões comportamentais e identificar possíveis indicadores de saúde mental. O sistema utiliza algoritmos de redes neurais para processar suas respostas e fornecer insights personalizados.
       </p>
       <div class="como-funciona-steps">
         <div class="step">
           <div class="step-icon">🤖</div>
           <div class="step-desc">
             <h4>Análise por IA</h4>
-            <p>Nossa IA analisa suas respostas usando algoritmos de machine learning desenvolvidos especificamente para este projeto.</p>
+            <p>Nossa IA analisa suas respostas usando algoritmos de Redes Neurais desenvolvidos especificamente para este projeto.</p>
           </div>
         </div>
         <div class="step">
@@ -134,7 +145,7 @@ const navigateToForm = () => {
           <div class="step-icon">🎯</div>
           <div class="step-desc">
             <h4>Resultados Personalizados</h4>
-            <p>Você recebe um diagnóstico preliminar e recomendações específicas baseadas em sua situação.</p>
+            <p>Você recebe uma análise preliminar e recomendações baseadas em sua situação.</p>
           </div>
         </div>
       </div>
