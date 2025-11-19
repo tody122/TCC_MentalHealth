@@ -30,6 +30,30 @@ const closeWarningModal = () => {
   showWarningModal.value = false
 }
 
+const getGrauGravidade = (probabilidade) => {
+  const prob = probabilidade * 100;
+  if (prob <= 20) return {
+    titulo: "Baixa probabilidade de sintomas relacionados",
+    recomendacao: "Ainda que os indicadores sejam baixos, é importante manter hábitos saudáveis e cuidar da saúde mental. Em caso de dúvidas ou mudanças no bem-estar, a orientação de um profissional qualificado é sempre recomendada."
+  };
+  if (prob <= 40) return {
+    titulo: "Indícios leves de possíveis sintomas.",
+    recomendacao: "Os dados sugerem uma atenção inicial. Mesmo em estágios leves, procurar um profissional qualificado pode oferecer suporte e esclarecimento adequados."
+  };
+  if (prob <= 60) return {
+    titulo: "Probabilidade moderada de sintomas.",
+    recomendacao: "Este resultado aponta sinais que merecem atenção. A avaliação com um profissional da saúde mental é altamente recomendada para compreender melhor a situação e buscar orientações adequadas."
+  };
+  if (prob <= 80) return {
+    titulo: "Sinais relevantes de possíveis sintomas.",
+    recomendacao: "A análise indica um nível significativo de possíveis indícios. Buscar o acompanhamento de um profissional qualificado é uma medida essencial para cuidado e prevenção."
+  };
+  return {
+    titulo: "Alta probabilidade de sintomas consistentes.",
+    recomendacao: "O resultado sugere fortes indícios que podem estar associados a quadros de depressão ou ansiedade. Recomendamos com ênfase que procure um profissional de saúde mental para avaliação individual e orientação especializada."
+  };
+}
+
 const getMensagemPredicao = (predicao) => {
   console.log('Valor da predição recebido:', predicao, 'Tipo:', typeof predicao)
   if (predicao === "1" || predicao === 1) return "Você apresenta traços de ansiedade, depressão ou estresse"
