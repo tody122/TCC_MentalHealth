@@ -97,7 +97,7 @@ const navigateToForm = () => {
       </div>
       <div class="info-card">
         <h3>O que é Estresse?</h3>
-        <p>O estresse é uma resposta natural do corpo ao estresse, mas quando excessiva, pode se tornar um transtorno. Caracteriza-se por preocupação e medo intensos, excessivos e persistentes sobre situações cotidianas.</p>
+        <p>O estresse é a resposta do corpo a pressões, desafios ou situações que exigem adaptação. Em pequenas doses, ele ajuda a manter o foco e a energia. Porém, quando se torna frequente ou intenso, passa a provocar desgaste emocional e físico, afetando o funcionamento diário.</p>
         <ul class="info-list">
           <li>Ansiedade</li>
           <li>Falta de sono</li>
