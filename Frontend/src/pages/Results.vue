@@ -56,8 +56,8 @@ const getGrauGravidade = (probabilidade) => {
 
 const getMensagemPredicao = (predicao) => {
   console.log('Valor da predição recebido:', predicao, 'Tipo:', typeof predicao)
-  if (predicao === "1" || predicao === 1) return "Você apresenta traços de ansiedade, depressão ou estresse"
-  if (predicao === "0" || predicao === 0) return "Você não apresenta traços de ansiedade, depressão ou estresse"
+  if (predicao === "1" || predicao === 1) return "Os dados sugerem que vocês não se encontram em um bom estado emocional"
+  if (predicao === "0" || predicao === 0) return "Os dados sugerem que você se encontra em um bom estado emocional."
   return "Resultado não disponível"
 }
 
